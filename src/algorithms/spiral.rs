@@ -16,18 +16,18 @@ impl Generator for Spiral {
         let initial_colour = random_rgb();
         image.put_pixel(x, y, initial_colour);
         
-        for move_length in (1..args.width * 2).step_by(2) {
+        for move_length in (1..std::cmp::max(args.width, args.height) * 2).step_by(2) {
             for _right in 0..move_length {
                 spiral_iteration(&mut image, (&mut x, &mut y), Direction::Right);
             }
             for _down in 0..move_length {
-                spiral_iteration(&mut image, (&mut x, &mut y), Direction::Right);
+                spiral_iteration(&mut image, (&mut x, &mut y), Direction::Down);
             }
             for _left in 0..(move_length + 1) {
-                spiral_iteration(&mut image, (&mut x, &mut y), Direction::Right);
+                spiral_iteration(&mut image, (&mut x, &mut y), Direction::Left);
             }
             for _up in 0..(move_length + 1) {
-                spiral_iteration(&mut image, (&mut x, &mut y), Direction::Right);
+                spiral_iteration(&mut image, (&mut x, &mut y), Direction::Up);
             }
         }
 
@@ -43,8 +43,8 @@ fn spiral_iteration(image: &mut RgbaImage, (x,y): (&mut u32, &mut u32), dir: Dir
     match dir {
         Direction::Up => {*y = y.wrapping_sub(1)}
         Direction::Left => {*x = x.wrapping_sub(1)}
-        Direction::Down => {*y += 1}
-        Direction::Right => {*x += 1}
+        Direction::Down => {*y = y.wrapping_add(1)}
+        Direction::Right => {*x = x.wrapping_add(1)}
     }
     if !image.in_bounds(*x, *y) {
         return
@@ -108,8 +108,8 @@ fn adjacent_avg_incl(image: &RgbaImage, x: u32, y: u32) -> Rgba<u8> {
     // let min_mult = 0.95;
     // let max_mult = (min_mult + ((-min_mult * (3. * min_mult - 4.)) as f64).sqrt()) / (2. * min_mult);
 
-    let min = -2.0;
-    let max = 2.0;
+    let min = -3.0;
+    let max = 3.0;
 
     channels.iter_mut().for_each(|intensity| *intensity += rng.gen_range(min..=max));
 
