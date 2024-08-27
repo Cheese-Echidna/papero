@@ -1,0 +1,15 @@
+pub mod agile;
+pub mod spiral;
+// pub mod spiralal;
+pub mod neo;
+pub mod pinski;
+pub mod isac;
+pub mod mandel;
+// pub mod hilbert;
+// pub mod multi_agile;
+// pub mod maze;
+// pub mod u_gradient;
+// pub mod vector;
+// pub mod imaginary;
+// pub mod waterfall;
+// pub mod wave;
