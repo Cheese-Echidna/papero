@@ -1,7 +1,4 @@
 use crate::*;
-use image::{RgbaImage, Rgba, GenericImageView, GenericImage};
-use rand;
-use rand::Rng;
 
 pub(crate) struct Spiral {}
 
@@ -13,7 +10,7 @@ impl Generator for Spiral {
         
         let (mut x, mut y) = (rng.gen_range((image.width()*2/5)..(image.width()*3/5)), rng.gen_range((image.height()/5)..(image.height()*4/5)));
         
-        let initial_colour = random_rgb();
+        let initial_colour = random_utils::random_colour::random_rgb();
         image.put_pixel(x, y, initial_colour);
         
         for move_length in (1..std::cmp::max(args.width, args.height) * 2).step_by(2) {
@@ -60,16 +57,6 @@ enum Direction {
     Right
 }
 
-pub fn random_rgb() -> Rgba<u8> {
-    let mut rng = rand::thread_rng();
-
-    let red = rng.gen_range(0..=255);
-    let green = rng.gen_range(0..=255);
-    let blue = rng.gen_range(0..=255);
-
-    Rgba([red, green, blue, 255])
-}
-
 fn adjacent_avg_incl(image: &RgbaImage, x: u32, y: u32) -> Rgba<u8> {
     let mut rng = rand::thread_rng();
 
@@ -107,10 +94,13 @@ fn adjacent_avg_incl(image: &RgbaImage, x: u32, y: u32) -> Rgba<u8> {
     // let min_mult = 0.95;
     // let max_mult = (min_mult + ((-min_mult * (3. * min_mult - 4.)) as f64).sqrt()) / (2. * min_mult);
 
-    let min = -3.0;
-    let max = 3.0;
+    // let min = -3.0;
+    // let max = 3.0;
 
-    channels.iter_mut().for_each(|intensity| *intensity += rng.gen_range(min..=max));
+    use rand_distr::Distribution;
+    let distribution = rand_distr::Normal::new(0.0, 1.3).unwrap();
+
+    channels.iter_mut().for_each(|intensity| *intensity += distribution.sample(&mut rng));
 
     let c = channels.map(|value| value.round() as u8);
 

@@ -9,3 +9,5 @@ winres = "0.1.11"
 [dependencies]
 image = "0.25.2"
 rand = "0.8.5"
+rand_distr = "0.4.3"
+rayon = "1.10.0"

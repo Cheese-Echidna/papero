@@ -1,15 +1,14 @@
+use image::Rgb;
 use crate::*;
-use raster::*;
 use Direction::*;
-use crate::wave::Direction::down_left;
 
 pub struct Wave;
 
-impl Plugin for Wave {
-    fn create() -> Image {
-        let sea = Color::rgb(10, 10, 255);
-        let coast = Color::rgb(255, 255, 10);
-        let land = Color::rgb(10, 255, 10);
+impl Generator for Wave {
+    fn gen_image(args: &Args) -> DynamicImage {
+        let sea = Rgb([10, 10, 255]);
+        let coast = Rgb([255, 255, 10]);
+        let land = Rgb([10, 255, 10]);
 
         /*
         Sea tiles can only go below or to the side of coast tiles, or anywhere next to other sea tiles
@@ -21,6 +20,10 @@ impl Plugin for Wave {
 
 
         Image::blank(WIDTH, HEIGHT)
+    }
+
+    fn name() -> &'static str {
+        "Wave Function Collapse - First"
     }
 }
 

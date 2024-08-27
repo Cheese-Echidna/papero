@@ -1,9 +1,13 @@
 mod algorithms;
 mod image_manager;
+mod utils;
 
-use image::{DynamicImage};
+use image::{DynamicImage, RgbaImage, Rgba32FImage, Rgba, GenericImageView};
+use rand;
+use rand::Rng;
+use utils::*;
+
 use image_manager::{ImageManager, Args};
-use algorithms::spiral::Spiral;
 
 trait Generator {
     fn gen_image(args: &Args) -> DynamicImage;
@@ -11,6 +15,6 @@ trait Generator {
 }
 
 fn main() {
-    ImageManager::run::<Spiral>(&Args::new(1920, 1080, r"C:\Users\Gabriel\OneDrive\Coding\Projects\Paperos\papero\out\")).unwrap();
+    ImageManager::run::<algorithms::particle::voronoi::Voronoi>(&Args::new(1920, 1080, r"C:\Users\Gabriel\OneDrive\Coding\Projects\Paperos\papero\out\")).unwrap();
 }
 
