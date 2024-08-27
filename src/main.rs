@@ -11,6 +11,6 @@ trait Generator {
 }
 
 fn main() {
-    ImageManager::run::<Spiral>(&Args::new(828*2, 1792*2, r"C:\Users\Gabriel\OneDrive\Coding\Projects\Paperos\papero\out\")).unwrap();
+    ImageManager::run::<Spiral>(&Args::new(1920, 1080, r"C:\Users\Gabriel\OneDrive\Coding\Projects\Paperos\papero\out\")).unwrap();
 }
 

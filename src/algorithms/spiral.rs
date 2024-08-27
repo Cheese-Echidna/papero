@@ -60,7 +60,6 @@ enum Direction {
     Right
 }
 
-
 pub fn random_rgb() -> Rgba<u8> {
     let mut rng = rand::thread_rng();
 

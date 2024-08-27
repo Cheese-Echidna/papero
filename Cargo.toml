@@ -3,6 +3,9 @@ name = "papero"
 version = "0.1.0"
 edition = "2021"
 
+[build-dependencies]
+winres = "0.1.11"
+
 [dependencies]
 image = "0.25.2"
 rand = "0.8.5"
