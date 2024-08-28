@@ -1,5 +1,4 @@
 mod algorithms;
-mod image_manager;
 mod utils;
 
 use image::{DynamicImage, RgbaImage, Rgba32FImage, Rgba, GenericImageView};
@@ -15,6 +14,6 @@ trait Generator {
 }
 
 fn main() {
-    ImageManager::run::<algorithms::particle::voronoi::Voronoi>(&Args::new(1920, 1080, r"C:\Users\Gabriel\OneDrive\Coding\Projects\Paperos\papero\out\")).unwrap();
+    ImageManager::run_wallpaper::<algorithms::particle::voronoi::Voronoi>(&Args::new(1920, 1080, r"C:\Users\Gabriel\OneDrive\Coding\Projects\Paperos\papero\out\"));
 }
 

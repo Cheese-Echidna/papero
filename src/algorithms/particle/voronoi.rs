@@ -9,7 +9,7 @@ pub struct Voronoi;
 impl Generator for Voronoi {
     fn gen_image(args: &Args) -> DynamicImage {
         let points = (0_usize..500)
-            .map(|x| {
+            .map(|_| {
                 (Point::random_particle_zero_one(), random_utils::random_colour::random_rgb_f32())
             }
         ).collect::<Vec<(Point, Rgba<f32>)>>();
