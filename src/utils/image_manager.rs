@@ -2,7 +2,7 @@ use std::path::PathBuf;
 use image::ImageResult;
 use crate::*;
 
-pub(crate) struct ImageManager {}
+pub struct ImageManager {}
 
 impl ImageManager {
     fn save(image: &DynamicImage, args: &Args, name: &str) -> ImageResult<()> {

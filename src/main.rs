@@ -1,7 +1,7 @@
 mod algorithms;
 mod utils;
 
-use image::{DynamicImage, RgbaImage, Rgba32FImage, Rgba, GenericImageView};
+use image::{DynamicImage, RgbaImage, Rgba32FImage, Rgba, GenericImageView, Rgb, Rgb32FImage};
 use rand;
 use rand::Rng;
 use utils::*;
@@ -14,6 +14,6 @@ trait Generator {
 }
 
 fn main() {
-    ImageManager::run_wallpaper::<algorithms::particle::voronoi::Voronoi>(&Args::new(1920, 1080, r"C:\Users\Gabriel\OneDrive\Coding\Projects\Paperos\papero\out\"));
+    ImageManager::run_wallpaper::<algorithms::complex::mandel::Mandel>(&Args::new(1920, 1080, r"C:\Users\Gabriel\OneDrive\Coding\Projects\Paperos\papero\out\"));
 }
 
