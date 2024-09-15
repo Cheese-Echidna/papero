@@ -15,7 +15,7 @@ trait Generator : Default {
 
 fn main() {
     // 1792, 828
-    ImageManager::run::<algorithms::pixel::boring::Boring>
-        (&Args::new(1920, 1080, r"C:\Users\Gabriel\OneDrive\Coding\Projects\Paperos\papero\out\")).unwrap();
+    ImageManager::run::<algorithms::particle::voronoi::Voronoi>
+        (&Args::new(1920*4*3, 1080*4, r"C:\Users\Gabriel\OneDrive\Coding\Projects\Paperos\papero\out\")).unwrap();
 }
 

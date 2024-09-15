@@ -10,11 +10,11 @@ pub struct Voronoi;
 impl Generator for Voronoi {
     fn generate(args: &Args) -> DynamicImage {
         let (w, h) = (args.width as f64, args.height as f64);
-        let points = (0_usize..4000)
+        let points = (0_usize..400)
             .map(|_| {
                 let p = Point::random_particle_w_h(w, h);
                 let (x ,y) = ((p.x() / w) as f32,  (p.y() / h) as f32);
-                let c= colour_utils::convert_from_ok_hsl(x, y, 0.5);
+                let c= colour_utils::sick_gradient(x, y);
                 (p, c)
             }
         ).collect::<Vec<(Point, Rgb<f32>)>>();
