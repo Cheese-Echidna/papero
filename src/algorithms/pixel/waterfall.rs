@@ -1,14 +1,11 @@
 use std::f32::consts::{E, PI};
 use crate::*;
 
+#[derive(Default)]
 pub(crate) struct Waterfall;
 
 impl Generator for Waterfall {
-    fn name() -> &'static str {
-        "Waterfall"
-    }
-
-    fn gen_image(args: &Args) -> DynamicImage {
+    fn generate(args: &Args) -> DynamicImage {
         let mut image = Rgb32FImage::new(args.width, args.height);
 
         for y in 0..args.height {
@@ -24,6 +21,10 @@ impl Generator for Waterfall {
             }
         }
         image.into()
+    }
+
+    fn name() -> &'static str {
+        "Waterfall"
     }
 }
 

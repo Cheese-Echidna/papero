@@ -3,6 +3,9 @@ name = "papero"
 version = "0.1.0"
 edition = "2021"
 
+[profile.dev]
+opt-level = 3               # Use slightly better optimizations.
+
 [build-dependencies]
 winres = "0.1.11"
 
@@ -14,3 +17,4 @@ rayon = "1.10.0"
 wallpaper = "3.2.0"
 num = "0.4.3"
 palette = "0.7.6"
+strum = { version = "0.26", features = ["derive"] }

@@ -1,9 +1,10 @@
 use crate::*;
 
+#[derive(Default)]
 pub(crate) struct Spiral {}
 
 impl Generator for Spiral {
-    fn gen_image(args: &Args) -> DynamicImage {
+    fn generate(args: &Args) -> DynamicImage {
         let mut image = RgbaImage::new(args.width, args.height);
         
         let mut rng = rand::thread_rng();

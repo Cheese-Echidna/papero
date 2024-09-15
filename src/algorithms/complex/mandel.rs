@@ -1,10 +1,11 @@
 use num::complex::{Complex64, ComplexFloat};
 use crate::*;
 
+#[derive(Default)]
 pub(crate) struct Mandel;
 
 impl Generator for Mandel {
-    fn gen_image(args: &Args) -> DynamicImage {
+    fn generate(args: &Args) -> DynamicImage {
         let mut image = Rgb32FImage::new(args.width, args.height);
         let mut rng = rand::thread_rng();
         let (width, height) = (args.width as f64, args.height as f64);
