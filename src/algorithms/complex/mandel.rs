@@ -7,7 +7,6 @@ pub(crate) struct Mandel;
 impl Generator for Mandel {
     fn generate(args: &Args) -> DynamicImage {
         let mut image = Rgb32FImage::new(args.width, args.height);
-        let mut rng = rand::thread_rng();
         let (width, height) = (args.width as f64, args.height as f64);
 
         for py in 0..args.height {

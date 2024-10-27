@@ -30,5 +30,5 @@ pub(crate) fn convert_from_ok_hsv(h: f32, s:f32, v: f32) -> Rgb<f32> {
 }
 
 pub(crate) fn sick_gradient(x: f32, y: f32) -> Rgb<f32> {
-    convert_from_ok_hsl(x*1.0, num_utils::clamp(y*2.0, 0.0, 1.0), num_utils::lerp(num_utils::clamp(y*2.0, 1.0, 2.0), 0.6, 0.0))
+    convert_from_ok_hsl(lerp(x, 0.0, 0.33), 0.75, lerp(y, 0.2, 0.7))
 }

@@ -69,8 +69,7 @@ impl GeneratorTypes {
                 ImageManager::run::<algorithms::pixel::spiral::Spiral>(args)
             }
             GeneratorTypes::Waterfall(x) => {
-                ImageManager::run::<algorithms::pixel::waterfall::Waterfall
-                >(args)
+                ImageManager::run::<algorithms::pixel::waterfall::Waterfall>(args)
             }
         }
     }
