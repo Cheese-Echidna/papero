@@ -18,3 +18,6 @@ wallpaper = "3.2.0"
 num = "0.4.3"
 palette = "0.7.6"
 strum = { version = "0.26", features = ["derive"] }
+fast_hilbert = "2.0.0"
+noise = "0.9.0"
+glam = "0.29.2"
