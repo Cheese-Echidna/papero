@@ -45,6 +45,29 @@ impl ImageManager {
     pub(crate) fn run_all(args: &Args) {
         GeneratorTypes::iter().for_each(|x| {let _ = x.run(args);});
     }
+
+    pub(crate) fn run_and_upscale<T: Generator>(args: &Args, n: u32) -> ImageResult<()> {
+        if n == 0 {
+            panic!("Cannot downscale by factor 0, how would we get it back again")
+        }
+        if n == 1 {
+            return ImageManager::run::<T>(args)
+        }
+        assert_eq!(args.width % n, 0, "n must be a factor of the width");
+        assert_eq!(args.height % n, 0, "n must be a factor of the height");
+
+        let new_args = Args::new(args.width / n, args.height / n, args.output_dir.clone());
+        let name = T::name();
+        println!("Generating an image with {}, downscaled by factor {n}", name);
+        let start = std::time::Instant::now();
+        let image = T::generate(&new_args);
+        println!("Finished generating image in {:?}", start.elapsed());
+        println!("Upscaling image by factor {n}");
+        let new_image = utils::upscale::upscale(image, n);
+        let res = ImageManager::save(&new_image, args, name);
+        println!("Saved image to {}\\{}.png", ImageManager::get_output_path(&args, name).to_str().unwrap(), name);
+        res
+    }
 }
 
 
@@ -75,37 +98,6 @@ impl GeneratorTypes {
     }
 }
 
-// macro_rules! generate_enum {
-//     ($($variant:ident => $path:path),*) => {
-//         #[derive(Sequence)]
-//         enum GeneratorTypes {
-//             $(
-//                 $variant($path),
-//             )*
-//         }
-//
-//         impl GeneratorTypes {
-//             fn run(self, args: &Args) -> ImageResult<()> {
-//                 match self {
-//                     $(
-//                         GeneratorTypes::$variant(x) => {
-//                             ImageManager::run::<$path>(args)
-//                         }
-//                     )*
-//                 }
-//             }
-//         }
-//     };
-// }
-//
-// generate_enum!(
-//     Mandel => algorithms::complex::mandel::Mandel,
-//     Voronoi => algorithms::particle::voronoi::Voronoi,
-//     Spiral => algorithms::pixel::spiral::Spiral,
-//     Waterfall => algorithms::pixel::waterfall::Waterfall
-// );
-
-
 pub(crate) struct Args {
     pub(crate) width: u32,
     pub(crate) height: u32,
@@ -120,4 +112,6 @@ impl Args {
             output_dir: dir.into(),
         }
     }
+    pub(crate) fn wh(&self) -> (u32, u32) {(self.width, self.height)}
+
 }

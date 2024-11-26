@@ -5,6 +5,7 @@ use image::{DynamicImage, RgbaImage, Rgba32FImage, Rgba, GenericImageView, Rgb, 
 use rand;
 use rand::Rng;
 use utils::*;
+use crate::utils::colour_utils::into;
 
 use image_manager::{ImageManager, Args};
 
@@ -14,8 +15,18 @@ trait Generator : Default {
 }
 
 fn main() {
-    // 1792, 828
-    ImageManager::run::<algorithms::pixel::v::V>
-        (&Args::new(1920, 1080, r"C:\Users\Gabriel\OneDrive\Coding\Projects\Paperos\papero\out\")).unwrap();
+
+    let a = Args::new(1920, 1080, r"C:\Users\Gabriel\OneDrive\Coding\Projects\Paperos\papero\out\");
+
+    ImageManager::run::<algorithms::complex::mandel::Mandel>(&a).unwrap();
 }
 
+// #[cfg(test)]
+// mod tests {
+//     use super::*;
+//
+//     #[test]
+//     fn test_all() {
+//
+//     }
+// }
