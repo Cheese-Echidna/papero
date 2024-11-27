@@ -42,9 +42,9 @@ impl ImageManager {
         wallpaper::set_from_path(path.to_str().unwrap()).unwrap();
     }
 
-    pub(crate) fn run_all(args: &Args) {
-        GeneratorTypes::iter().for_each(|x| {let _ = x.run(args);});
-    }
+    // pub(crate) fn run_all(args: &Args) {
+    //     GeneratorTypes::iter().for_each(|x| {let _ = x.run(args);});
+    // }
 
     pub(crate) fn run_and_upscale<T: Generator>(args: &Args, n: u32) -> ImageResult<()> {
         if n == 0 {
@@ -70,33 +70,33 @@ impl ImageManager {
     }
 }
 
-
-#[derive(EnumIter)]
-enum GeneratorTypes {
-    Mandel(algorithms::complex::mandel::Mandel),
-    Voronoi(algorithms::particle::voronoi::Voronoi),
-    Spiral(algorithms::pixel::spiral::Spiral),
-    Waterfall(algorithms::pixel::waterfall::Waterfall
-    ),
-}
-impl GeneratorTypes {
-    fn run(self, args: &Args) -> ImageResult<()> {
-        match self {
-            GeneratorTypes::Mandel(x) => {
-                ImageManager::run::<algorithms::complex::mandel::Mandel>(args)
-            }
-            GeneratorTypes::Voronoi(x) => {
-                ImageManager::run::<algorithms::particle::voronoi::Voronoi>(args)
-            }
-            GeneratorTypes::Spiral(x) => {
-                ImageManager::run::<algorithms::pixel::spiral::Spiral>(args)
-            }
-            GeneratorTypes::Waterfall(x) => {
-                ImageManager::run::<algorithms::pixel::waterfall::Waterfall>(args)
-            }
-        }
-    }
-}
+//
+// #[derive(EnumIter)]
+// enum GeneratorTypes {
+//     Mandel(algorithms::complex::mandel::Mandel),
+//     Voronoi(algorithms::particle::voronoi::Voronoi),
+//     Spiral(algorithms::pixel::spiral::Spiral),
+//     Waterfall(algorithms::pixel::waterfall::Waterfall),
+// }
+//
+// impl GeneratorTypes {
+//     fn run(self, args: &Args) -> ImageResult<()> {
+//         match self {
+//             GeneratorTypes::Mandel(x) => {
+//                 ImageManager::run::<algorithms::complex::mandel::Mandel>(args)
+//             }
+//             GeneratorTypes::Voronoi(x) => {
+//                 ImageManager::run::<algorithms::particle::voronoi::Voronoi>(args)
+//             }
+//             GeneratorTypes::Spiral(x) => {
+//                 ImageManager::run::<algorithms::pixel::spiral::Spiral>(args)
+//             }
+//             GeneratorTypes::Waterfall(x) => {
+//                 ImageManager::run::<algorithms::pixel::waterfall::Waterfall>(args)
+//             }
+//         }
+//     }
+// }
 
 pub(crate) struct Args {
     pub(crate) width: u32,

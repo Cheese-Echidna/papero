@@ -11,8 +11,6 @@ pub fn create(config: Config) -> RgbaImage {
     let initial_colour = random_rgb();
     image.set_pixel(current_x, current_y, initial_colour).unwrap();
 
-    // let progress = indicatif::ProgressBar::new((config.width*2) as u64).with_style(indicatif::ProgressStyle::default_bar().template("{spinner:.green} [{elapsed_precise}] [{bar:40.cyan/blue}] {pos:>7}/{len:7} {msg}").expect("Beans").progress_chars("#>-"));
-
     for move_length in (1..config.width * 2).step_by(2) {
         // if move_length % 101 == 0 {
         //     progress.inc(101*2);

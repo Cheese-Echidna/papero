@@ -18,7 +18,7 @@ fn main() {
 
     let a = Args::new(1920, 1080, r"C:\Users\Gabriel\OneDrive\Coding\Projects\Paperos\papero\out\");
 
-    ImageManager::run::<algorithms::complex::mandel::Mandel>(&a).unwrap();
+    ImageManager::run::<algorithms::particle::domain::DomainWarping>(&a).unwrap();
 }
 
 // #[cfg(test)]

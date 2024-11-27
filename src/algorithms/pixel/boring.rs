@@ -1,5 +1,4 @@
 use crate::*;
-use crate::algorithms::particle::particle::Point;
 use rayon::prelude::*;
 use num_utils::*;
 
