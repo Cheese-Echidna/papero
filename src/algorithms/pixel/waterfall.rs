@@ -4,6 +4,8 @@ use crate::*;
 #[derive(Default)]
 pub(crate) struct Waterfall;
 
+// todo: this is yet to work
+
 impl Generator for Waterfall {
     fn generate(args: &Args) -> DynamicImage {
         let mut image = Rgb32FImage::new(args.width, args.height);

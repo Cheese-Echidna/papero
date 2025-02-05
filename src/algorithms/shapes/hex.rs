@@ -1,8 +1,7 @@
 use rand_distr::num_traits::clamp;
 use crate::{Args, Generator};
 use crate::*;
-use crate::Gimel::*;
-use crate::position::*;
+
 
 pub struct Dalet;
 

@@ -24,7 +24,7 @@ impl Generator for Boring {
     }
 
     fn name() -> &'static str {
-        "Boring gradient"
+        "Boring gradient test"
     }
 }
 

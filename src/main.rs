@@ -16,17 +16,12 @@ trait Generator : Default {
 
 fn main() {
 
+    // let a = Args::new(1920, 1080, r"C:\Users\Gabriel\OneDrive\Coding\Projects\Paperos\papero\out\");
     let a = Args::new(1920, 1080, r"C:\Users\Gabriel\OneDrive\Coding\Projects\Paperos\papero\out\");
 
-    ImageManager::run::<algorithms::particle::domain::DomainWarping>(&a).unwrap();
+    ImageManager::run::<algorithms::shapes::gimel::Gimel>(&a).unwrap();
 }
 
-// #[cfg(test)]
-// mod tests {
-//     use super::*;
-//
-//     #[test]
-//     fn test_all() {
-//
-//     }
-// }
+// TODO
+//  particle/flow
+//  shapes/hex

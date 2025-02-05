@@ -45,6 +45,7 @@ impl ImageManager {
     // pub(crate) fn run_all(args: &Args) {
     //     GeneratorTypes::iter().for_each(|x| {let _ = x.run(args);});
     // }
+    // pub(crate) fn run_a
 
     pub(crate) fn run_and_upscale<T: Generator>(args: &Args, n: u32) -> ImageResult<()> {
         if n == 0 {
@@ -67,6 +68,15 @@ impl ImageManager {
         let res = ImageManager::save(&new_image, args, name);
         println!("Saved image to {}\\{}.png", ImageManager::get_output_path(&args, name).to_str().unwrap(), name);
         res
+    }
+
+    pub(crate) fn run_res_mult<T: Generator>(args: &Args, n: u32) -> ImageResult<()> {
+        if n == 0 {
+            panic!("Cannot downscale by factor 0, how would we get it back again")
+        }
+
+        let new_args = Args::new(args.width * n, args.height * n, args.output_dir.clone());
+        Self::run::<T>(&new_args)
     }
 }
 

@@ -34,6 +34,13 @@ pub(crate) fn sick_gradient(x: f32, y: f32) -> Rgb<f32> {
     convert_from_ok_hsl(lerp(x, 0.0, 0.33), 0.75, lerp(y, 0.2, 0.7))
 }
 
+pub(crate) fn custom_transition_gradient(x: f32, y: f32) -> Rgb<f32> {
+    let h = lerp(y, 180., 265.) / 360.;
+    let s = 1.;
+    let l = x * 0.6 + 0.1;
+    convert_from_ok_hsl(h, s, l)
+}
+
 pub(crate) fn into<C>(color: C) -> image::Rgba<u8>
 where
     C: IntoColor<palette::Srgba>, // Ensure the color can be converted into Srgba
@@ -52,6 +59,20 @@ where
 
     image::Rgba([r, g, b, a])
 }
+
+pub(crate) fn into_f32<C>(color: C) -> image::Rgb<f32>
+where
+    C: IntoColor<palette::Srgb<f32>>, // Ensure the color can be converted into Srgba
+{
+    // Convert the input color to sRGBA (standard RGBA with floating-point components)
+    let srgba: palette::Srgb = color.into_color();
+
+    // Clamp each component to [0.0, 1.0] to avoid overflow/underflow
+    let clamped = srgba.clamp();
+
+    image::Rgb::from([clamped.red, clamped.green, clamped.blue])
+}
+
 
 pub(crate) fn into_no_alpha<C>(color: C) -> image::Rgb<u8>
 where
