@@ -10,59 +10,71 @@ Enjoy the best results below.
 ---
 
 Bitwise Image Magic
-[[demo/Bitwise%20Image%20Magic.png]]
+
+![Bitwise Image Magic.png](demo/Bitwise%20Image%20Magic.png)
 
 ---
 
 Boring gradient test
-![Boring gradient test.png](demo/Boring gradient test.png)
+
+![Boring gradient test.png](demo/Boring%20gradient%20test.png)
 
 ---
 
 Domain Warping
-![Domain Warping.png](demo/Domain Warping.png)
+
+![Domain Warping.png](demo/Domain%20Warping.png)
 
 ---
 
 Flow
+
 ![Flow.png](demo/Flow.png)
 
 ---
 
 Hexagons
+
 ![Hexagons.png](demo/Hexagons.png)
 
 ---
 
 Hilbert Curve
-![Hilbert Curve.png](demo/Hilbert Curve.png)
+
+![Hilbert Curve.png](demo/Hilbert%20Curve.png)
 
 ---
 
 Mandelbrot
+
 ![Mandelbrot.png](demo/Mandelbrot.png)
 
 ---
 
 Noisy renderer
-![Noisy renderer.png](demo/Noisy renderer.png)
+
+![Noisy renderer.png](demo/Noisy%20renderer.png)
 
 ---
 
 Sierpiński's Triangle
-![Sierpiński's Triangle.png](demo/Sierpiński's Triangle.png)
+
+![Sierpiński's Triangle.png](demo/Sierpiński's%20Triangle.png)
 
 ---
 
 Spiral
+
 ![Spiral.png](demo/Spiral.png)
 
 ---
 
 Voronoi
+
 ![Voronoi.png](demo/Voronoi.png)
 
 ---
 
 Waterfall
+
 ![Waterfall.png](demo/Waterfall.png)
