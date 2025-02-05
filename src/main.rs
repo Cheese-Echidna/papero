@@ -16,7 +16,7 @@ trait Generator : Default {
 
 fn main() {
     let a = Args::new(1920, 1080, r"C:\Users\Gabriel\OneDrive\Coding\Projects\Paperos\papero\out\");
-    ImageManager::run::<algorithms::maths::pinski::Pinksi>(&a).unwrap();
+    ImageManager::run::<algorithms::particle::flow::Flow>(&a).unwrap();
 }
 
 #[cfg(test)]

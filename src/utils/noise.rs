@@ -3,11 +3,11 @@ use glam::Vec2;
 use noise::NoiseFn;
 use crate::utils::image_manager::Args;
 
-const SCALE_FACTOR: f64 = 300.;
+const SCALE_FACTOR: f64 = 150.;
 const NOISE_FACTOR: f64 = 400.;
 
 
-fn fbm(seed: u32, h: f64, n: usize, x: DVec2) -> f64 {
+pub fn fbm(seed: u32, h: f64, n: usize, x: DVec2) -> f64 {
     // let max_min = (2.0_f64.powf(h) - 2.0_f64.powf(h - h * n as f64)) / (2.0_f64.powf(h) - 1.0);
     // let max_min = (1. - 2.0_f64.powf(-h*n as f64)) / (h * 2.0_f64.ln());
 
