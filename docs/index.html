@@ -2,17 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Image Gallery</title>
+    <title>{{ site.title }}</title>
     <style>
-        /* Style the images for a simple gallery look */
-        img {
+        /* Basic styling for the gallery */
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+        }
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .gallery img {
             max-width: 200px;
             margin: 10px;
-            border: 1px solid #ccc;
+            border: 1px solid #ddd;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
         }
     </style>
 </head>
 <body>
-<h1>Image Gallery</h1>
+<h1>{{ site.title }}</h1>
+<div class="gallery">
+    {% for file in site.static_files %}
+    {% assign path = file.path | downcase %}
+    {% if path contains '/static/' and (path endswith '.jpg' or path endswith '.jpeg' or path endswith '.png' or path endswith '.gif') %}
+    <img src="{{ file.path }}" alt="{{ file.name }}">
+    {% endif %}
+    {% endfor %}
+</div>
 </body>
 </html>
