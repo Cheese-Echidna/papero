@@ -6,10 +6,14 @@ use crate::utils::num_utils::lerp;
 
 pub(crate) trait ImageColour<T: ColourType>: Sized {
     fn from_const(named: palette::Srgb<u8>) -> Self {
-        Self::from_srgb(Rgb([named.red, named.blue, named.green]))
+        Self::from_u8(Rgb([named.red, named.blue, named.green]))
     }
-    fn from_srgb(colour: image::Rgb<u8>) -> Self;
+    fn from_u8(colour: impl ImageColour<u8>) -> Self;
+    fn from_f32(colour: impl ImageColour<f32>) -> Self;
     fn with_alpha(self) -> Rgba<T>;
+    fn without_alpha(self) -> Rgb<T>;
+    fn to_u8(self) -> impl ImageColour<u8>;
+    fn to_f32(self) -> impl ImageColour<f32>;
 }
 
 impl ColourType for f32 {
@@ -19,6 +23,18 @@ impl ColourType for f32 {
 
     fn from_u8(x: u8) -> Self {
         x as f32 / 255.
+    }
+
+    fn from_f32(x: f32) -> Self {
+        x
+    }
+
+    fn to_u8(self) -> u8 {
+        u8::from_f32(self)
+    }
+
+    fn to_f32(self) -> f32 {
+        self
     }
 }
 
@@ -30,31 +46,80 @@ impl ColourType for u8 {
     fn from_u8(x: u8) -> Self {
         x
     }
+
+    fn from_f32(x: f32) -> Self {
+        (x * 255.) as u8
+    }
+
+    fn to_u8(self) -> u8 {
+        self
+    }
+
+    fn to_f32(self) -> f32 {
+        f32::from_u8(self)
+    }
 }
 
 trait ColourType: Sized {
     fn max() -> Self;
     fn from_u8(x: u8) -> Self;
+    fn from_f32(x: f32) -> Self;
+    fn to_u8(self) -> u8;
+    fn to_f32(self) -> f32;
 }
 
 impl<T: ColourType> ImageColour<T> for image::Rgb<T> {
-    fn from_srgb(colour: Rgb<u8>) -> Self {
-        Rgb::<T>(colour.0.map(|v| T::from_u8(v)))
+    fn from_u8(colour: impl ImageColour<u8>) -> Self {
+        Rgb(colour.without_alpha().0.map(|x| T::from_u8(x)))
     }
+
+    fn from_f32(colour: impl ImageColour<f32>) -> Self {
+        Rgb(colour.without_alpha().0.map(|x| T::from_f32(x)))
+    }
+
 
     fn with_alpha(self) -> image::Rgba<T> {
         let [r, g, b] = self.0;
         Rgba::<T>([r, g, b, T::max()])
     }
+
+    fn without_alpha(self) -> Rgb<T> {
+        self
+    }
+
+    fn to_u8(self) -> impl ImageColour<u8> {
+        Rgb(self.0.map(|x| x.to_u8()))
+    }
+
+    fn to_f32(self) -> impl ImageColour<f32> {
+        Rgb(self.0.map(|x| x.to_f32()))
+    }
 }
 
 impl<T: ColourType> ImageColour<T> for image::Rgba<T> {
-    fn from_srgb(colour: Rgb<u8>) -> Self {
-        Rgb::<T>(colour.0.map(|v| T::from_u8(v))).with_alpha()
+    fn from_u8(colour: impl ImageColour<u8>) -> Self {
+        Rgba(colour.with_alpha().0.map(|x| T::from_u8(x)))
+    }
+
+    fn from_f32(colour: impl ImageColour<f32>) -> Self {
+        Rgba(colour.with_alpha().0.map(|x| T::from_f32(x)))
     }
 
     fn with_alpha(self) -> image::Rgba<T> {
         self
+    }
+
+    fn without_alpha(self) -> Rgb<T> {
+        let [r, g, b, _] = self.0;
+        Rgb([r, g, b])
+    }
+
+    fn to_u8(self) -> impl ImageColour<u8> {
+        Rgba(self.0.map(|x| x.to_u8()))
+    }
+
+    fn to_f32(self) -> impl ImageColour<f32> {
+        Rgba(self.0.map(|x| x.to_f32()))
     }
 }
 

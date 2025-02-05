@@ -1,5 +1,5 @@
 use std::path::PathBuf;
-use image::ImageResult;
+use image::{ImageResult, Pixel};
 use strum::{EnumIter, IntoEnumIterator};
 
 use crate::*;
@@ -142,6 +142,15 @@ impl Args {
 
     pub(crate) fn image_u8(&self, colour: Rgb<u8>) -> RgbImage {
         let mut image = RgbImage::new(self.width, self.height);
+        for x in 0..self.width {
+            for y in 0..self.height {
+                image.put_pixel(x, y, colour);
+            }
+        }
+        image
+    }
+    pub(crate) fn image_f32_alpha(&self, colour: Rgba<f32>) -> Rgba32FImage {
+        let mut image = Rgba32FImage::new(self.width, self.height);
         for x in 0..self.width {
             for y in 0..self.height {
                 image.put_pixel(x, y, colour);
