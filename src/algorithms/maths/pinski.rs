@@ -79,27 +79,3 @@ fn u24_from_colour(c: &Rgb<u8>) -> U24 {
     let b = c.0[2] as u32;
     (r << 2*8) + (g << 1*8) + b
 }
-
-fn colour_from_u24(x:U24) -> Rgb<u8> {
-    let r = ((x & 0xff0000) >> 2*8) as u8;
-    let g = ((x & 0x00ff00) >> 1*8) as u8;
-    let b = (x & 0x0000ff) as u8;
-
-    return Rgb::<u8>::from([r, g, b]);
-}
-
-fn angle_mean_01(a:f32, b:f32) -> f32 {
-    let x = zero_one_to_rad(a).cos() + zero_one_to_rad(b).cos() / 2.0;
-    let y = zero_one_to_rad(a).sin() + zero_one_to_rad(b).sin() / 2.0;
-    let ang = y.atan2(x);
-    return rad_to_01(ang)
-}
-
-fn rad_to_01(rad:f32) -> f32 {
-    return rad / (2.0 * std::f32::consts::PI)
-}
-
-fn zero_one_to_rad(zero_one:f32) -> f32 {
-    return zero_one * (2.0 * std::f32::consts::PI)
-}
-

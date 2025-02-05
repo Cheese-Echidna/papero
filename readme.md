@@ -1,0 +1,68 @@
+# Papero
+### By Gabriel Garriock
+
+Welcome to papero, a project about generating cool wallpapers.
+
+This repo is a culmination of various different iterations of this idea of the years. 
+
+Enjoy the best results below.
+
+---
+
+Bitwise Image Magic
+![Bitwise Image Magic.png](demo/Bitwise Image Magic.png)
+
+---
+
+Boring gradient test
+![Boring gradient test.png](demo/Boring gradient test.png)
+
+---
+
+Domain Warping
+![Domain Warping.png](demo/Domain Warping.png)
+
+---
+
+Flow
+![Flow.png](demo/Flow.png)
+
+---
+
+Hexagons
+![Hexagons.png](demo/Hexagons.png)
+
+---
+
+Hilbert Curve
+![Hilbert Curve.png](demo/Hilbert Curve.png)
+
+---
+
+Mandelbrot
+![Mandelbrot.png](demo/Mandelbrot.png)
+
+---
+
+Noisy renderer
+![Noisy renderer.png](demo/Noisy renderer.png)
+
+---
+
+Sierpiński's Triangle
+![Sierpiński's Triangle.png](demo/Sierpiński's Triangle.png)
+
+---
+
+Spiral
+![Spiral.png](demo/Spiral.png)
+
+---
+
+Voronoi
+![Voronoi.png](demo/Voronoi.png)
+
+---
+
+Waterfall
+![Waterfall.png](demo/Waterfall.png)

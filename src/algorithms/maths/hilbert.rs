@@ -1,6 +1,5 @@
 use crate::*;
 use fast_hilbert;
-use image::GenericImage;
 
 #[derive(Default)]
 pub(crate) struct Hilbert;

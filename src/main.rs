@@ -21,11 +21,20 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
+    use std::fs;
     use super::*;
 
     #[test]
     fn all_images() {
-        let args = Args::new(1920, 1080, r"C:\Users\Gabriel\OneDrive\Coding\Projects\Paperos\papero\demo");
+        let demo_dir = r"C:\Users\Gabriel\OneDrive\Coding\Projects\Paperos\papero\demo";
+        let args = Args::new(1920, 1080, demo_dir);
         ImageManager::run_all_fast(&args);
+        let prefix = std::fs::read_to_string(r"C:\Users\Gabriel\OneDrive\Coding\Projects\Paperos\papero\prefix.md").unwrap();
+        let infix = fs::read_dir(demo_dir).unwrap().into_iter().map(|x| x.unwrap().file_name()).map(|x| {
+            let x = x.to_str().unwrap();
+            let name = x.strip_suffix(".png").unwrap_or(x);
+            format!("\n---\n\n{name}\n![{x}](demo/{x})\n")
+        }).collect::<String>();
+        std::fs::write(r"C:\Users\Gabriel\OneDrive\Coding\Projects\Paperos\papero\readme.md", prefix + &infix).unwrap();
     }
 }
