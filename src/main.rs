@@ -16,11 +16,20 @@ trait Generator : Default {
 
 fn main() {
     let a = Args::new(1920, 1080, r"C:\Users\Gabriel\OneDrive\Coding\Projects\Paperos\papero\out\");
-
     ImageManager::run::<algorithms::maths::pinski::Pinksi>(&a).unwrap();
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn all_images() {
+        let args = Args::new(1920, 1080, r"C:\Users\Gabriel\OneDrive\Coding\Projects\Paperos\papero\output\");
+        ImageManager::run_all(&args);
+    }
 }
 
 // TODO
 //  particle/flow
 //  make build actions run all and show them on the repo
-//  pinski

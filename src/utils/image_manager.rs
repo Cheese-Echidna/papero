@@ -36,16 +36,30 @@ impl ImageManager {
         res
     }
 
+    pub(crate) fn run_silent<T: Generator>(args: &Args) -> (&str, std::time::Duration) {
+        let name = T::name();
+        let start = std::time::Instant::now();
+        let image = T::generate(args);
+        let time = start.elapsed();
+        let res = ImageManager::save(&image, args, name);
+        (name, time)
+    }
+
     fn set_as_wallpaper(args: &Args, name: &str) {
         let path = Self::get_output_path(args, name);
         wallpaper::set_mode(wallpaper::Mode::Span).unwrap();
         wallpaper::set_from_path(path.to_str().unwrap()).unwrap();
     }
 
-    // pub(crate) fn run_all(args: &Args) {
-    //     GeneratorTypes::iter().for_each(|x| {let _ = x.run(args);});
-    // }
-    // pub(crate) fn run_a
+    pub(crate) fn run_all(args: &Args) {
+        GeneratorTypes::iter().for_each(|x| {
+            let (name, time) = x.run(args);
+            let secs = time.as_secs_f64();
+            let (whole, fract) = (secs as u32, (secs.fract() * 100.) as u32);
+            println!("{:<22} {:>3}.{:<2}s", name, whole, fract);
+        });
+
+    }
 
     pub(crate) fn run_and_upscale<T: Generator>(args: &Args, n: u32) -> ImageResult<()> {
         if n == 0 {
@@ -80,33 +94,35 @@ impl ImageManager {
     }
 }
 
-//
-// #[derive(EnumIter)]
-// enum GeneratorTypes {
-//     Mandel(algorithms::complex::mandel::Mandel),
-//     Voronoi(algorithms::particle::voronoi::Voronoi),
-//     Spiral(algorithms::pixel::spiral::Spiral),
-//     Waterfall(algorithms::pixel::waterfall::Waterfall),
-// }
-//
-// impl GeneratorTypes {
-//     fn run(self, args: &Args) -> ImageResult<()> {
-//         match self {
-//             GeneratorTypes::Mandel(x) => {
-//                 ImageManager::run::<algorithms::complex::mandel::Mandel>(args)
-//             }
-//             GeneratorTypes::Voronoi(x) => {
-//                 ImageManager::run::<algorithms::particle::voronoi::Voronoi>(args)
-//             }
-//             GeneratorTypes::Spiral(x) => {
-//                 ImageManager::run::<algorithms::pixel::spiral::Spiral>(args)
-//             }
-//             GeneratorTypes::Waterfall(x) => {
-//                 ImageManager::run::<algorithms::pixel::waterfall::Waterfall>(args)
-//             }
-//         }
-//     }
-// }
+macro_rules! generator_types {
+    ( $( $variant:ident : $path:path ),+ $(,)? ) => {
+        #[derive(EnumIter)]
+        enum GeneratorTypes {
+            $(
+                $variant($path),
+            )+
+        }
+
+        impl GeneratorTypes {
+            fn run(self, args: &Args) -> (&str, std::time::Duration) {
+                match self {
+                    $(
+                        GeneratorTypes::$variant(x) => {
+                            ImageManager::run_silent::<$path>(args)
+                        }
+                    ),+
+                }
+            }
+        }
+    }
+}
+
+generator_types! {
+    // Mandel: algorithms::maths::mandel::Mandel,
+    Voronoi: algorithms::particle::voronoi::Voronoi,
+    Spiral: algorithms::pixel::spiral::Spiral,
+    Waterfall: algorithms::pixel::waterfall::Waterfall,
+}
 
 pub(crate) struct Args {
     pub(crate) width: u32,

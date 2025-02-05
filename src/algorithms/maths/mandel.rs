@@ -21,7 +21,7 @@ impl Generator for Mandel {
                 let (x,y) = ((px as f64 / width - 0.5), -((py as f64 / height - 0.5) * height / width));
                 let c = Complex64::new(x, y).scale(mandel_width) + centre;
 
-                let (dist_bound, iter_bound) = (2.0, 2000);
+                let (dist_bound, iter_bound) = (2.0, 200);
 
                 let colour = escape_rgb(c.recip(), dist_bound, iter_bound);
 
