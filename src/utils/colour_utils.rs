@@ -1,9 +1,62 @@
-use std::f32::consts::TAU;
 use crate::*;
 use palette;
-use palette::{convert, Clamp, Hsva, FromColor, IntoColor};
+use palette::{convert, Clamp, FromColor, IntoColor};
 use rand::random;
 use crate::utils::num_utils::lerp;
+
+pub(crate) trait ImageColour<T: ColourType>: Sized {
+    fn from_const(named: palette::Srgb<u8>) -> Self {
+        Self::from_srgb(Rgb([named.red, named.blue, named.green]))
+    }
+    fn from_srgb(colour: image::Rgb<u8>) -> Self;
+    fn with_alpha(self) -> Rgba<T>;
+}
+
+impl ColourType for f32 {
+    fn max() -> Self {
+        1.0
+    }
+
+    fn from_u8(x: u8) -> Self {
+        x as f32 / 255.
+    }
+}
+
+impl ColourType for u8 {
+    fn max() -> Self {
+        255
+    }
+
+    fn from_u8(x: u8) -> Self {
+        x
+    }
+}
+
+trait ColourType: Sized {
+    fn max() -> Self;
+    fn from_u8(x: u8) -> Self;
+}
+
+impl<T: ColourType> ImageColour<T> for image::Rgb<T> {
+    fn from_srgb(colour: Rgb<u8>) -> Self {
+        Rgb::<T>(colour.0.map(|v| T::from_u8(v)))
+    }
+
+    fn with_alpha(self) -> image::Rgba<T> {
+        let [r, g, b] = self.0;
+        Rgba::<T>([r, g, b, T::max()])
+    }
+}
+
+impl<T: ColourType> ImageColour<T> for image::Rgba<T> {
+    fn from_srgb(colour: Rgb<u8>) -> Self {
+        Rgb::<T>(colour.0.map(|v| T::from_u8(v))).with_alpha()
+    }
+
+    fn with_alpha(self) -> image::Rgba<T> {
+        self
+    }
+}
 
 /// All in range [0,1]
 pub(crate) fn convert_from_ok_hsl(h: f32, s:f32, l: f32) -> Rgb<f32> {
@@ -92,12 +145,9 @@ where
     image::Rgb([r, g, b])
 }
 
-
 pub(crate) fn random_colour() -> Rgba<f32> {
     Rgba::from([random(), random(), random(), 1.0])
 }
-
-use crate::*;
 
 pub fn random_rgb() -> Rgba<u8> {
     let mut rng = rand::thread_rng();

@@ -124,4 +124,13 @@ impl Args {
     }
     pub(crate) fn wh(&self) -> (u32, u32) {(self.width, self.height)}
 
+    pub(crate) fn image_u8(&self, colour: Rgb<u8>) -> RgbImage {
+        let mut image = RgbImage::new(self.width, self.height);
+        for x in 0..self.width {
+            for y in 0..self.height {
+                image.put_pixel(x, y, colour);
+            }
+        }
+        image
+    }
 }
