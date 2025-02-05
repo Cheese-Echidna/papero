@@ -1,7 +1,8 @@
 use std::path::PathBuf;
+use std::time::Duration;
 use image::{ImageResult, Pixel};
 use strum::{EnumIter, IntoEnumIterator};
-
+use rayon::prelude::*;
 use crate::*;
 
 pub struct ImageManager {}
@@ -11,6 +12,10 @@ impl ImageManager {
         let output: RgbaImage = image.to_rgba8();
         let dir = Self::get_output_path(args, name);
         output.save(dir)
+    }
+
+    fn name<T: Generator>() -> &'static str {
+        T::name()
     }
 
     pub(crate) fn run_wallpaper<T: Generator>(args: &Args) {
@@ -34,13 +39,16 @@ impl ImageManager {
         res
     }
 
-    pub(crate) fn run_silent<T: Generator>(args: &Args) -> (&str, std::time::Duration) {
+    pub(crate) fn run_silent<T: Generator>(args: &Args) -> (String, std::time::Duration) {
         let name = T::name();
+        if std::fs::exists(Self::get_output_path(args, name)).unwrap_or(false) {
+            return (format!("Skipped {name}"), Duration::from_micros(0))
+        }
         let start = std::time::Instant::now();
         let image = T::generate(args);
         let time = start.elapsed();
         let res = ImageManager::save(&image, args, name);
-        (name, time)
+        (name.to_string(), time)
     }
 
     fn set_as_wallpaper(args: &Args, name: &str) {
@@ -51,12 +59,22 @@ impl ImageManager {
 
     pub(crate) fn run_all(args: &Args) {
         GeneratorTypes::iter().for_each(|x| {
+            print!("{:<22}", x.name());
+            let (name, time) = x.run(args);
+            let secs = time.as_secs_f64();
+            let (whole, fract) = (secs as u32, (secs.fract() * 100.) as u32);
+            println!(" {:>3}.{:<2}s", whole, fract);
+        });
+    }
+
+    pub(crate) fn run_all_fast(args: &Args) {
+        let types = GeneratorTypes::iter().collect::<Vec<_>>();
+        types.into_par_iter().for_each(|x| {
             let (name, time) = x.run(args);
             let secs = time.as_secs_f64();
             let (whole, fract) = (secs as u32, (secs.fract() * 100.) as u32);
             println!("{:<22} {:>3}.{:<2}s", name, whole, fract);
         });
-
     }
 
     pub(crate) fn run_and_upscale<T: Generator>(args: &Args, n: u32) -> ImageResult<()> {
@@ -102,11 +120,20 @@ macro_rules! generator_types {
         }
 
         impl GeneratorTypes {
-            fn run(self, args: &Args) -> (&str, std::time::Duration) {
+            fn run(self, args: &Args) -> (String, std::time::Duration) {
                 match self {
                     $(
                         GeneratorTypes::$variant(x) => {
                             ImageManager::run_silent::<$path>(args)
+                        }
+                    ),+
+                }
+            }
+            fn name(&self) -> &str {
+                match self {
+                    $(
+                        GeneratorTypes::$variant(x) => {
+                            ImageManager::name::<$path>()
                         }
                     ),+
                 }

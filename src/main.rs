@@ -26,8 +26,6 @@ mod tests {
     #[test]
     fn all_images() {
         let args = Args::new(1920, 1080, r"C:\Users\Gabriel\OneDrive\Coding\Projects\Paperos\papero\demo");
-        ImageManager::run_all(&args);
+        ImageManager::run_all_fast(&args);
     }
 }
-
-// TODO

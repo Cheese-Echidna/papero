@@ -7,10 +7,10 @@ use crate::{Args, Generator};
 use crate::utils::colour_utils;
 use crate::utils::colour_utils::ImageColour;
 
-const NOISE_SCALE: f32 = 0.2;
+const NOISE_SCALE: f64 = 0.002;
 const FORCE_SCALE: f32 = 1.;
 
-const DENSITY: f32 = 0.02;
+const DENSITY: f32 = 0.002;
 
 struct Particle {
     prev_pos: Vec2,
@@ -221,7 +221,7 @@ fn blend(bg: Rgba<f32>, fg: Rgba<f32>) -> Rgba<f32> {
 // noise_image.save("perlin.png");
 
 fn force_at(pos: Vec2, seed: u32) -> Vec2 {
-    let noise = crate::noise::fbm(seed, 2.0, 5, pos.as_dvec2()) as f32;
+    let noise = crate::noise::fbm(seed, NOISE_SCALE, 3, pos.as_dvec2()) as f32;
     let theta = noise * TAU;
     force_from_angle(theta - FRAC_PI_2)
 }

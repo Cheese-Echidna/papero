@@ -1,6 +1,8 @@
+use std::f64::consts::{FRAC_1_PI, FRAC_1_SQRT_2};
 use glam::f64::DVec2;
 use glam::Vec2;
 use noise::{MultiFractal, NoiseFn, OpenSimplex};
+use num::integer::Roots;
 use crate::utils::image_manager::Args;
 
 const SCALE_FACTOR: f64 = 150.;
@@ -8,7 +10,8 @@ const NOISE_FACTOR: f64 = 400.;
 
 
 pub fn fbm(seed: u32, h: f64, n: usize, x: DVec2) -> f64 {
-    noise::Fbm::<OpenSimplex>::new(seed).set_octaves(n).get((x * h).to_array())
+    let offset = DVec2::new(FRAC_1_PI, FRAC_1_SQRT_2);
+    noise::Fbm::<OpenSimplex>::new(seed).set_octaves(n).get((x * h + offset).to_array())
     /*
     old (worse) method vvvv
     let max_min = (2.0_f64.powf(h) - 2.0_f64.powf(h - h * n as f64)) / (2.0_f64.powf(h) - 1.0);
