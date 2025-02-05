@@ -9,5 +9,5 @@ fn main() {
 
 #[cfg(not(target_os = "windows"))]
 fn main() {
-    panic!("This program is only meant to be compiled for Windows.")
+    println!("Not windows, its okay, but no icon this time")
 }
