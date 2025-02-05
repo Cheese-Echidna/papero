@@ -20,9 +20,7 @@ impl ImageManager {
     }
 
     fn get_output_path(args: &Args, name: &str) -> PathBuf {
-        let mut dir = args.output_dir.clone();
-        dir.push(format!("{}.png", name));
-        dir
+        args.output_dir.clone().join(format!("{}.png", name))
     }
 
     pub(crate) fn run<T: Generator>(args: &Args) -> ImageResult<()> {
@@ -32,7 +30,7 @@ impl ImageManager {
         let image = T::generate(args);
         println!("Finished generating image in {:?}", start.elapsed());
         let res = ImageManager::save(&image, args, name);
-        println!("Saved image to {}\\{}.png", ImageManager::get_output_path(&args, name).to_str().unwrap(), name);
+        println!("Saved image to {}", ImageManager::get_output_path(&args, name).to_str().unwrap());
         res
     }
 
@@ -118,10 +116,21 @@ macro_rules! generator_types {
 }
 
 generator_types! {
-    // Mandel: algorithms::maths::mandel::Mandel,
-    Voronoi: algorithms::particle::voronoi::Voronoi,
-    Spiral: algorithms::pixel::spiral::Spiral,
-    Waterfall: algorithms::pixel::waterfall::Waterfall,
+    Mandel:     algorithms::maths::mandel::Mandel,
+    Hilbert:    algorithms::maths::hilbert::Hilbert,
+    Pinski:     algorithms::maths::pinski::Pinski,
+    //
+    Domain:     algorithms::particle::domain::DomainWarping,
+    Flow:       algorithms::particle::flow::Flow,
+    Voronoi:    algorithms::particle::voronoi::Voronoi,
+    //
+    Bitwise:    algorithms::pixel::bitwise::Bitwise,
+    Gradient:   algorithms::pixel::gradient_test::Boring,
+    Noise:      algorithms::pixel::noise::NoiseRender,
+    Spiral:     algorithms::pixel::spiral::Spiral,
+    Waterfall:  algorithms::pixel::waterfall::Waterfall,
+    //
+    Hex:        algorithms::shapes::hex::Hex
 }
 
 pub(crate) struct Args {
@@ -142,6 +151,15 @@ impl Args {
 
     pub(crate) fn image_u8(&self, colour: Rgb<u8>) -> RgbImage {
         let mut image = RgbImage::new(self.width, self.height);
+        for x in 0..self.width {
+            for y in 0..self.height {
+                image.put_pixel(x, y, colour);
+            }
+        }
+        image
+    }
+    pub(crate) fn image_f32(&self, colour: Rgb<f32>) -> Rgb32FImage {
+        let mut image = Rgb32FImage::new(self.width, self.height);
         for x in 0..self.width {
             for y in 0..self.height {
                 image.put_pixel(x, y, colour);

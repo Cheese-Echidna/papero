@@ -1,6 +1,6 @@
 use glam::f64::DVec2;
 use glam::Vec2;
-use noise::NoiseFn;
+use noise::{MultiFractal, NoiseFn, OpenSimplex};
 use crate::utils::image_manager::Args;
 
 const SCALE_FACTOR: f64 = 150.;
@@ -8,9 +8,11 @@ const NOISE_FACTOR: f64 = 400.;
 
 
 pub fn fbm(seed: u32, h: f64, n: usize, x: DVec2) -> f64 {
-    // let max_min = (2.0_f64.powf(h) - 2.0_f64.powf(h - h * n as f64)) / (2.0_f64.powf(h) - 1.0);
-    // let max_min = (1. - 2.0_f64.powf(-h*n as f64)) / (h * 2.0_f64.ln());
-
+    noise::Fbm::<OpenSimplex>::new(seed).set_octaves(n).get((x * h).to_array())
+    /*
+    old (worse) method vvvv
+    let max_min = (2.0_f64.powf(h) - 2.0_f64.powf(h - h * n as f64)) / (2.0_f64.powf(h) - 1.0);
+    let max_min = (1. - 2.0_f64.powf(-h*n as f64)) / (h * 2.0_f64.ln());
     let x = x / NOISE_FACTOR;
 
     let g = f64::exp2(-h);
@@ -21,11 +23,12 @@ pub fn fbm(seed: u32, h: f64, n: usize, x: DVec2) -> f64 {
     let noise = noise::Simplex::new(seed);
 
     for _ in 0..n {
-        t += a * noise.get((x * f).to_array());
-        f *= 2.0;
-        a *= g;
+    t += a * noise.get((x * f).to_array());
+    f *= 2.0;
+    a *= g;
     }
     t
+    */
 }
 
 // fn fbm_2d(seed1: u32, seed2: u32, h: f64, n: usize, x: DVec2) -> DVec2 {

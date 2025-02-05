@@ -6,9 +6,9 @@ type U24 = u32;
 
 
 #[derive(Default)]
-pub(crate) struct Pinksi {}
+pub(crate) struct Pinski {}
 
-impl Generator for Pinksi {
+impl Generator for Pinski {
     fn generate(args: &Args) -> DynamicImage {
         let black = Rgb::<u8>::from_const(BLACK);
         let white = Rgb::<u8>::from_const(WHITE);

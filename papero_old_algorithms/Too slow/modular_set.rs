@@ -4,40 +4,40 @@
 
 use crate::*;
 use num::Complex;
-use rand::Rng;
+use palette::named::BLACK;
+use crate::utils::colour_utils::ImageColour;
 
 const X_LIM_MIN: f64 = -2.;
 const X_LIM_MAX: f64 = 2.;
 
-// const Y_OFFSET: f64 = 0.0;
-// const Y_LIM_MIN: f64 = -(X_LIM_MAX - X_LIM_MIN + Y_OFFSET) / 2. * HEIGHT as f64 / WIDTH as f64;
-// const Y_LIM_MAX: f64 = (X_LIM_MAX - X_LIM_MIN - Y_OFFSET) / 2. * HEIGHT as f64 / WIDTH as f64;
-
-
+#[derive(Default)]
 pub(crate) struct Modular;
 
-impl Plugin for Modular {
-    fn create() -> Image {
-        let mut image = Image::blank(WIDTH, HEIGHT);
-        for px in 0..WIDTH {
-            for py in 0..HEIGHT {
-                let result = modular_set(Complex::new(px as f64 / WIDTH as f64 , py as f64 / HEIGHT as f64), 2);
-                let c:Color = Color::rgb(result.re as u8 * 255, 0, result.im as u8 * 255);
-                image.set_pixel(px, py, c).unwrap();
+impl Generator for Modular {
+    fn generate(args: &Args) -> DynamicImage {
+        let mut image = args.image_f32(Rgb::from_const(BLACK));
+        for px in 0..args.width {
+            for py in 0..args.height {
+                let result = modular_set(Complex::new(px as f64 / args.width as f64 , py as f64 / args.height as f64), 2);
+                let c = Rgb([result.re as f32, 0., result.im as f32]);
+                image.put_pixel(px, py, c);
             }
         }
 
-        image
+        image.into()
+    }
+
+    fn name() -> &'static str {
+        "Complex Modular Set Generator"
     }
 }
 
 fn modular_set(t: Complex<f64>, k: i32) -> Complex<f64> {
-
     let mut sum:Complex<f64> = Complex::new(0., 0.);
     let mut m = 0;
     let mut n = 0;
-    let mut k = 0;
-    loop{
+    let mut k = k;
+    for _i in 0..100 {
         k += 1;
         (m,n) = match k%4 {
             0 => (m+1, n),

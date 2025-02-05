@@ -1,4 +1,5 @@
 use crate::*;
+use crate::utils::colour_utils::ImageColour;
 
 #[derive(Default)]
 pub(crate) struct Spiral {}
@@ -11,7 +12,7 @@ impl Generator for Spiral {
         
         let (mut x, mut y) = (rng.gen_range((image.width()*2/5)..(image.width()*3/5)), rng.gen_range((image.height()/5)..(image.height()*4/5)));
         
-        let initial_colour = utils::colour_utils::random_rgb();
+        let initial_colour = utils::colour_utils::random_colour().to_u8().with_alpha();
         image.put_pixel(x, y, initial_colour);
         
         for move_length in (1..std::cmp::max(args.width, args.height) * 2).step_by(2) {

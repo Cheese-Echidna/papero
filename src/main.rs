@@ -25,11 +25,9 @@ mod tests {
 
     #[test]
     fn all_images() {
-        let args = Args::new(1920, 1080, "out/test/");
+        let args = Args::new(1920, 1080, r"C:\Users\Gabriel\OneDrive\Coding\Projects\Paperos\papero\demo");
         ImageManager::run_all(&args);
     }
 }
 
 // TODO
-//  particle/flow
-//  make build actions run all and show them on the repo
