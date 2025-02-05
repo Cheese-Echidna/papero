@@ -19,9 +19,11 @@ fn main() {
     // let a = Args::new(1920, 1080, r"C:\Users\Gabriel\OneDrive\Coding\Projects\Paperos\papero\out\");
     let a = Args::new(1920, 1080, r"C:\Users\Gabriel\OneDrive\Coding\Projects\Paperos\papero\out\");
 
-    ImageManager::run::<algorithms::shapes::gimel::Gimel>(&a).unwrap();
+    ImageManager::run::<algorithms::shapes::hex::Hex>(&a).unwrap();
 }
 
 // TODO
 //  particle/flow
 //  shapes/hex
+//  make build actions run all and show them on the repo
+//  do hex
