@@ -11,6 +11,7 @@ pub(crate) trait ImageColour<T: ColourType>: Sized {
     fn from_u8(colour: impl ImageColour<u8>) -> Self;
     fn from_f32(colour: impl ImageColour<f32>) -> Self;
     fn with_alpha(self) -> Rgba<T>;
+    fn with_alpha_of(self, a: T) -> Rgba<T>;
     fn without_alpha(self) -> Rgb<T>;
     fn to_u8(self) -> impl ImageColour<u8>;
     fn to_f32(self) -> impl ImageColour<f32>;
@@ -83,6 +84,11 @@ impl<T: ColourType> ImageColour<T> for image::Rgb<T> {
         Rgba::<T>([r, g, b, T::max()])
     }
 
+    fn with_alpha_of(self, a: T) -> Rgba<T> {
+        let [r, g, b] = self.0;
+        Rgba::<T>([r, g, b, a])
+    }
+
     fn without_alpha(self) -> Rgb<T> {
         self
     }
@@ -107,6 +113,12 @@ impl<T: ColourType> ImageColour<T> for image::Rgba<T> {
 
     fn with_alpha(self) -> image::Rgba<T> {
         self
+    }
+
+    fn with_alpha_of(self, a: T) -> Rgba<T> {
+        let mut new = self;
+        new.0[3] = a;
+        new
     }
 
     fn without_alpha(self) -> Rgb<T> {

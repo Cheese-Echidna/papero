@@ -2,17 +2,15 @@ use std::f32::consts::{FRAC_PI_2, TAU};
 use glam::{UVec2, UVec4, Vec2, Vec4};
 use image::{DynamicImage, GenericImageView, Rgba, Rgba32FImage};
 use rand::{random, Rng};
-use noise::{NoiseFn, Perlin, Seedable};
 use palette::named::BLACK;
 use crate::{Args, Generator};
 use crate::utils::colour_utils;
 use crate::utils::colour_utils::ImageColour;
-use crate::utils::image_manager::ImageManager;
 
-const NOISE_SCALE: f32 = 0.002;
+const NOISE_SCALE: f32 = 0.2;
 const FORCE_SCALE: f32 = 1.;
 
-const DENSITY: f32 = 0.007;
+const DENSITY: f32 = 0.02;
 
 struct Particle {
     prev_pos: Vec2,
@@ -61,9 +59,11 @@ impl Particle {
         // println!("drawn");
 
         // plot_line(image, self.prev_pos, self.pos, self.col);
-        let [a, b] = self.pos.as_uvec2().to_array();
-        if image.in_bounds(a, b) {
-            image.put_pixel(a, b, self.col)
+        let [x, y] = self.pos.as_uvec2().to_array();
+        if image.in_bounds(x, y) {
+            let prev = image.get_pixel(x, y);
+            let new = blend(*prev, self.col);
+            image.put_pixel(x, y, new)
         }
     }
 }
@@ -86,7 +86,7 @@ impl ParticleSet {
             let py = rng.gen_range(0.0..(size.1 as f32));
 
             // Gabe stuff
-            let col = colour_utils::sick_gradient(px / size.0 as f32, py / size.1 as f32).with_alpha();
+            let col = colour_utils::sick_gradient(px / size.0 as f32, py / size.1 as f32).with_alpha_of(0.35);
 
             particles.push(Particle::new(Vec2::new(px, py), lifetime, col));
         }
@@ -134,8 +134,9 @@ impl ParticleSet {
             self.update(args.wh());
             self.draw(&mut image);
 
+            let alive_prop = self.alive() as f32 / self.particles.len() as f32;
             if counter % 100 == 0 {
-                println!("i: {}, {}/{} particles", counter, self.alive(), self.particles.len());
+                println!("i: {}, {:.2}% particles", counter, alive_prop * 100.);
             }
         }
         image.into()
