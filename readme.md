@@ -10,7 +10,7 @@ Enjoy the best results below.
 ---
 
 Bitwise Image Magic
-![Bitwise Image Magic.png](demo/Bitwise Image Magic.png)
+[[demo/Bitwise%20Image%20Magic.png]]
 
 ---
 
