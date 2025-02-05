@@ -25,7 +25,7 @@ mod tests {
 
     #[test]
     fn all_images() {
-        let args = Args::new(1920, 1080, "docs/static/");
+        let args = Args::new(1920, 1080, "out/test/");
         ImageManager::run_all(&args);
     }
 }
