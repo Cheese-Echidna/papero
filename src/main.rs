@@ -9,14 +9,14 @@ use crate::utils::colour_utils::into;
 
 use image_manager::{ImageManager, Args};
 
-trait Generator : Default {
+trait Generator: Default {
     fn generate(args: &Args) -> DynamicImage;
     fn name() -> &'static str;
 }
 
 fn main() {
-    let a = Args::new(1920, 1080, r"C:\Users\Gabriel\OneDrive\Coding\Projects\Paperos\papero\out\");
-    ImageManager::run::<algorithms::particle::flow::Flow>(&a).unwrap();
+    let a = Args::new(1920, 1080, "out/");
+    ImageManager::run::<algorithms::pixel::noise::NoiseRender>(&a).unwrap();
 }
 
 #[cfg(test)]

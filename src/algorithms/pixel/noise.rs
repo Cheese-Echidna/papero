@@ -17,14 +17,13 @@ impl Generator for NoiseRender {
 
         let (width, height) = args.wh();
 
-        let scale_factor = 2.0;
+        let scale_factor = 1.0;
         let noise: Fbm<OpenSimplex> = Fbm::new(0).set_octaves(5);
 
         for py in 0..height {
             let y = py as f32 / (height as f32) - 0.5;
             for px in 0..width {
-                let x = px as f32 / (width as f32
-                ) - 0.5;
+                let x = px as f32 / (width as f32) - 0.5;
 
                 let (a, b, c, d) = (cos(x * TAU), sin(x * TAU), cos(y * TAU), sin(y * TAU));
 
@@ -47,9 +46,13 @@ impl Generator for NoiseRender {
                 let v2 = multistep(v2, 5);
 
                 let c1 = Vec3::new(0.81_f32, 0.56_f32, 0.43_f32) * v1 * 0.5;
-                let c2 = Vec3::new(0.34_f32, 0.67_f32, 0.97_f32) * v2 * 0.5;
+                // let c1 = Vec3::new(1.0, 0.0_f32, 0.0_f32) * v1 * 0.5;
+                let c2 = Vec3::new(0.22_f32, 0.28_f32, 0.17_f32) * v2;
+                // let c2 = Vec3::new(0.0_f32, 1.0_f32, 1.0_f32) * v2 * 0.5;
+                // rgb(57, 67, 43)
 
                 let colour = c1 + c2;
+                // let colour = c1 * 2.0;
 
                 image.put_pixel(px, py, Rgb(colour.to_array()));
             }
