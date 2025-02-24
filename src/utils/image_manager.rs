@@ -175,7 +175,7 @@ generator_types! {
     Julia:      algorithms::maths::julia::Julia,
     //
     Domain:     algorithms::particle::domain::DomainWarping,
-    Flow:       algorithms::particle::flow::Flow,
+    // Flow:       algorithms::particle::flow::Flow,
     Voronoi:    algorithms::particle::voronoi::Voronoi,
     //
     Bitwise:    algorithms::pixel::bitwise::Bitwise,
