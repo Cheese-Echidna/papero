@@ -7,6 +7,8 @@ This repo is a culmination of various different iterations of this idea of the y
 
 Enjoy the best results below.
 
+PS: In order to create this file just run `cargo test`
+
 ---
 
 Bitwise Image Magic

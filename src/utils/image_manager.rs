@@ -158,6 +158,7 @@ macro_rules! generator_types {
     }
 }
 
+/// Add your type and its path below
 generator_types! {
     Mandel:     algorithms::maths::mandel::Mandel,
     Hilbert:    algorithms::maths::hilbert::Hilbert,

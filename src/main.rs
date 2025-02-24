@@ -14,27 +14,36 @@ trait Generator : Default {
 }
 
 fn main() {
-    let a = Args::new(1920, 1080, r"C:\Users\Gabriel\OneDrive\Coding\Projects\Paperos\papero\out\");
+    let a = Args::new(1920, 1080, "out/");
     ImageManager::run::<algorithms::particle::flow::Flow>(&a).unwrap();
 }
 
 #[cfg(test)]
 mod tests {
     use std::fs;
+    use std::path::PathBuf;
+    use std::str::FromStr;
     use super::*;
 
     #[test]
     fn all_images() {
-        let demo_dir = r"C:\Users\Gabriel\OneDrive\Coding\Projects\Paperos\papero\demo";
-        let args = Args::new(1920, 1080, demo_dir);
+        let project_dir = project_root();
+        let demo_dir = project_dir.join("demo");
+        let args = Args::new(1920, 1080, &demo_dir);
         ImageManager::run_all_fast(&args);
-        let prefix = std::fs::read_to_string(r"C:\Users\Gabriel\OneDrive\Coding\Projects\Paperos\papero\prefix.md").unwrap();
+        let prefix = std::fs::read_to_string(project_dir.join("prefix.md")).unwrap();
         let infix = fs::read_dir(demo_dir).unwrap().into_iter().map(|x| x.unwrap().file_name()).map(|x| {
             let filename = x.to_str().unwrap();
             let file_path = "demo/".to_owned() + &filename.replace(" ", "%20");
             let name = filename.strip_suffix(".png").unwrap_or(filename);
             format!("\n---\n\n{name}\n\n![{filename}]({file_path})\n")
         }).collect::<String>();
-        std::fs::write(r"C:\Users\Gabriel\OneDrive\Coding\Projects\Paperos\papero\readme.md", prefix + &infix).unwrap();
+        std::fs::write(project_dir.join("readme.md"), prefix + &infix).unwrap();
     }
+
+
+    fn project_root() -> PathBuf {
+        PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+    }
+
 }
