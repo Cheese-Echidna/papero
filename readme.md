@@ -47,6 +47,12 @@ Hilbert Curve
 
 ---
 
+Julia (Jazzmine)
+
+![Julia (Jazzmine).png](demo/Julia%20(Jazzmine).png)
+
+---
+
 Mandelbrot
 
 ![Mandelbrot.png](demo/Mandelbrot.png)
