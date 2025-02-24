@@ -8,14 +8,14 @@ use crate::utils::colour_utils::into;
 
 use image_manager::{ImageManager, Args};
 
-trait Generator : Default {
+trait Generator: Default {
     fn generate(args: &Args) -> DynamicImage;
     fn name() -> &'static str;
 }
 
 fn main() {
-    let a = Args::new(1920, 1080, "out/");
-    ImageManager::run::<algorithms::particle::flow::Flow>(&a).unwrap();
+    let a = Args::new(1920, 1080, "./out");
+    ImageManager::run_res_mult::<algorithms::maths::julia::Julia>(&a, 1).unwrap();
 }
 
 #[cfg(test)]
