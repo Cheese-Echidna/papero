@@ -21,10 +21,28 @@ impl Generator for Mandel {
                     -((py as f64 / height - 0.5) * height / width),
                 );
                 let c = Complex64::new(x, y).scale(mandel_width) + centre;
+                let c = 1.0 / c;
 
-                let (dist_bound, iter_bound) = (2.0, 200);
 
-                let colour = escape_rgb(c.recip(), dist_bound, iter_bound);
+                let (dist_bound, iter_bound) = (2.0, 50);
+
+                let (_res, i) = escape(c, dist_bound, iter_bound);
+                let i = 1.0 - i as f32 / iter_bound as f32;
+
+                let h_start = 340.0/360.0;
+                let h_end = 200.0/360.0;
+
+                let s_start = 1.0;
+                let s_end = 0.7;
+
+                let l_start = 0.3;
+                let l_end = 0.8;
+
+                let hue = (h_start + i * (h_end - h_start));
+                let saturation = s_start + i * (s_end - s_start);
+                let lightness = l_start + i * (l_end - l_start);
+
+                let colour = colour_utils::convert_from_ok_hsl(hue, saturation, lightness);
 
                 image.put_pixel(px, py, colour);
             }
@@ -39,6 +57,21 @@ impl Generator for Mandel {
 }
 
 fn escape(c: Complex64, escaped: f64, limit: u32) -> (Complex64, u32) {
+
+    let mut num = 0_u32;
+    let mut z = c;
+
+    let escaped_sqr = escaped.powi(2);
+
+    while z.norm_sqr() < escaped_sqr && num < limit {
+        z = z.powu(2) + c;
+        num += 1;
+    }
+
+    (c, num)
+}
+
+fn escape_set(c: Complex64, escaped: f64, limit: u32) -> (Complex64, u32) {
     let mut set = HashSet::new();
 
     let mut num = 0_u32;
@@ -59,34 +92,34 @@ fn escape(c: Complex64, escaped: f64, limit: u32) -> (Complex64, u32) {
     (c, num)
 }
 
-fn escape_rgb(c: Complex64, escaped: f64, limit: u32) -> Rgb<f32> {
-    let mut set = HashSet::new();
-
-    let mut num = 0_u32;
-    let mut z = c;
-    set.insert(bits(z));
-
-    let escaped_sqr = escaped.powi(2);
-
-    while z.norm_sqr() < escaped_sqr && num < limit {
-        z = z.powu(2) + c;
-        num += 1;
-        if set.contains(&bits(z)) {
-            let limit_prop = num as f32 / limit as f32;
-
-            return colour_utils::convert_from_ok_hsl(lerp(limit_prop, 1.0, 0.75), 1.0, 0.5);
-        }
-        set.insert(bits(z));
-    }
-
-    let limit_prop = num as f32 / limit as f32;
-
-    if z.norm_sqr() >= escaped_sqr {
-        return colour_utils::convert_from_ok_hsl(0.8, 1.0, 1.0 - limit_prop);
-    }
-
-    Rgb([1.0, 1.0, 1.0])
-}
+// fn escape_rgb(c: Complex64, escaped: f64, limit: u32) -> Rgb<f32> {
+//     let mut set = HashSet::new();
+//
+//     let mut num = 0_u32;
+//     let mut z = c;
+//     set.insert(bits(z));
+//
+//     let escaped_sqr = escaped.powi(2);
+//
+//     while z.norm_sqr() < escaped_sqr && num < limit {
+//         z = z.powu(2) + c;
+//         num += 1;
+//         if set.contains(&bits(z)) {
+//             let limit_prop = num as f32 / limit as f32;
+//
+//             return colour_utils::convert_from_ok_hsl(lerp(limit_prop, 1.0, 0.75), 1.0, 0.5);
+//         }
+//         set.insert(bits(z));
+//     }
+//
+//     let limit_prop = num as f32 / limit as f32;
+//
+//     if z.norm_sqr() >= escaped_sqr {
+//         return colour_utils::convert_from_ok_hsl(0.8, 1.0, 1.0 - limit_prop);
+//     }
+//
+//     Rgb([1.0, 1.0, 1.0])
+// }
 
 fn bits(z: Complex64) -> u128 {
     let b1 = z.re.to_bits();

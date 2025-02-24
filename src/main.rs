@@ -17,7 +17,7 @@ trait Generator: Default {
 
 fn main() {
     let a = Args::new(1920, 1080, "./out");
-    ImageManager::run_res_mult::<algorithms::maths::julia::Julia>(&a, 1).unwrap();
+    ImageManager::run::<algorithms::maths::mandel::Mandel>(&a).unwrap();
 }
 
 #[cfg(test)]
