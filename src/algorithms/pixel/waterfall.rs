@@ -1,4 +1,4 @@
-use std::f32::consts::{E, PI};
+use std::f32::consts::PI;
 use crate::*;
 
 #[derive(Default)]
@@ -39,7 +39,7 @@ impl Waterfall {
             .map(|i| (x - 1).rem_euclid(width)) // rem_euclid means it doesn't stay negative
             .for_each(|new_x| {
                 let (px, py) = (new_x as u32, y-1);
-                let colour = image.get_pixel(px, py).0.iter().enumerate().for_each(|(i, value)| {
+                image.get_pixel(px, py).0.iter().enumerate().for_each(|(i, value)| {
                     output[i].push(*value);
                 });
             });

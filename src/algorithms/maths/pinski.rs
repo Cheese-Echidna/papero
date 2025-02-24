@@ -77,5 +77,5 @@ fn u24_from_colour(c: &Rgb<u8>) -> U24 {
     let r = c.0[0] as u32;
     let g = c.0[1] as u32;
     let b = c.0[2] as u32;
-    (r << 2*8) + (g << 8) + b
+    (r << (2*8)) + (g << 8) + b
 }

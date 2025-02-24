@@ -1,10 +1,10 @@
 use crate::utils::colour_utils::ImageColour;
 use crate::utils::image_manager::Args;
 use crate::Generator;
-use image::{DynamicImage, ImageResult, Rgb, Rgb32FImage, RgbaImage};
+use image::{DynamicImage, Rgb};
 use noise::{Fbm, MultiFractal, NoiseFn, OpenSimplex};
 use palette::named::BLACK;
-use palette::{Clamp, IntoColor};
+use palette::Clamp;
 use std::f32::consts::*;
 use glam::Vec3;
 
@@ -76,7 +76,7 @@ fn multistep(x: f32, num: u32) -> f32 {
 }
 
 fn step(x: f32, bound: f32) -> f32 {
-    return if x < bound { 0.0 } else { 1.0 };
+    if x < bound { 0.0 } else { 1.0 }
 }
 
 fn cos(x: f32) -> f32 {

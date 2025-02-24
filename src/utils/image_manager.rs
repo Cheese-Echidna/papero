@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use std::path::PathBuf;
 use std::time::Duration;
 use image::{ImageResult};
@@ -55,7 +57,7 @@ impl ImageManager {
         let start = std::time::Instant::now();
         let image = T::generate(args);
         let time = start.elapsed();
-        let res = ImageManager::save(&image, args, name);
+        let _res = ImageManager::save(&image, args, name);
         (name.to_string(), time)
     }
 
@@ -70,7 +72,7 @@ impl ImageManager {
     pub(crate) fn run_all(args: &Args) {
         GeneratorTypes::iter().for_each(|x| {
             print!("{:<22}", x.name());
-            let (name, time) = x.run(args);
+            let (_name, time) = x.run(args);
             let secs = time.as_secs_f64();
             let (whole, fract) = (secs as u32, (secs.fract() * 100.) as u32);
             println!(" {:>3}.{:<2}s", whole, fract);
@@ -96,14 +98,14 @@ impl ImageManager {
             panic!("Cannot downscale by factor 0, how would we get it back again")
         }
 
-        let new_args = Args::new(args.width * n, args.height * n, args.output_dir.clone());
+        let args = Args::new(args.width * n, args.height * n, args.output_dir.clone());
         let name = T::name();
         println!("Generating an image with {}, upscaled by factor {n}", name);
         let start = std::time::Instant::now();
-        let image = T::generate(args);
+        let image = T::generate(&args);
         println!("Finished generating image in {:?}", start.elapsed());
         let new_image = utils::upscale::downscale(image, n);
-        let res = ImageManager::save(&new_image, args, name);
+        let res = ImageManager::save(&new_image, &args, name);
         println!("Saved image to {}", ImageManager::get_output_path(&args, name).to_str().unwrap());
         res
     }
@@ -129,7 +131,7 @@ macro_rules! generator_types {
         #[derive(EnumIter)]
         enum GeneratorTypes {
             $(
-                $variant($path),
+                $variant,
             )+
         }
 
@@ -137,7 +139,7 @@ macro_rules! generator_types {
             fn run(self, args: &Args) -> (String, std::time::Duration) {
                 match self {
                     $(
-                        GeneratorTypes::$variant(x) => {
+                        GeneratorTypes::$variant => {
                             ImageManager::run_silent::<$path>(args)
                         }
                     ),+
@@ -146,7 +148,7 @@ macro_rules! generator_types {
             fn name(&self) -> &str {
                 match self {
                     $(
-                        GeneratorTypes::$variant(x) => {
+                        GeneratorTypes::$variant => {
                             ImageManager::name::<$path>()
                         }
                     ),+

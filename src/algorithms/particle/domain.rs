@@ -1,9 +1,7 @@
-use glam::{DVec2, Vec2};
-use image::{DynamicImage, RgbImage, RgbaImage};
-use crate::algorithms::particle::particle::Particle;
+use glam::Vec2;
+use image::{DynamicImage, RgbImage};
 use crate::{utils, Generator};
 use crate::utils::image_manager::Args;
-use noise::{NoiseFn, OpenSimplex};
 use palette::LinSrgb;
 
 #[derive(Default)]

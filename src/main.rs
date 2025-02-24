@@ -2,7 +2,6 @@ mod algorithms;
 mod utils;
 
 use image::{DynamicImage, RgbaImage, Rgba32FImage, Rgba, GenericImageView, Rgb, Rgb32FImage, RgbImage};
-use rand;
 use rand::Rng;
 use utils::*;
 use crate::utils::colour_utils::into;

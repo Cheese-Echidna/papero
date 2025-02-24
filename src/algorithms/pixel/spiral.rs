@@ -48,7 +48,7 @@ fn spiral_iteration(image: &mut RgbaImage, (x,y): (&mut u32, &mut u32), dir: Dir
     if !image.in_bounds(*x, *y) {
         return
     }
-    let colour = adjacent_avg_incl(&image, *x, *y);
+    let colour = adjacent_avg_incl(image, *x, *y);
     image.put_pixel(*x, *y, colour);
 }
 

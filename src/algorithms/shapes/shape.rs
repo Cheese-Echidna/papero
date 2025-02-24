@@ -1,8 +1,6 @@
 use crate::utils::image_manager::Args;
 use glam::{UVec2, Vec2, Vec3};
 use image::{DynamicImage, GenericImage, Rgb, Rgb32FImage};
-use palette::named::BLACK;
-use crate::utils::colour_utils::into_f32;
 
 pub struct ShapeSet {
     pub(crate) objects: Vec<Box<dyn ShapeObject>>,

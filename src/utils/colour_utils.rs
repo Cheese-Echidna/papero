@@ -1,7 +1,8 @@
+#![allow(dead_code)]
+
 use glam::{Vec3, Vec4};
 use crate::*;
-use palette;
-use palette::{convert, Clamp, FromColor, IntoColor};
+use palette::{convert, Clamp, IntoColor};
 use rand::random;
 use crate::utils::num_utils::lerp;
 
@@ -260,7 +261,7 @@ pub(crate) fn random_colour() -> Rgb<f32> {
 pub fn random_ok_rgb_f32() -> Rgb<f32> {
     let mut rng = rand::thread_rng();
 
-    let mut rand = || rng.gen_range((0.0)..(1.0));
+    let mut rand = || rng.gen_range((0.0)..1.0);
 
     colour_utils::convert_from_ok_hsl(rand(), rand(), rand())
 }

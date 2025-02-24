@@ -1,5 +1,6 @@
+#![allow(dead_code)]
 use glam::Vec4;
-use image::{DynamicImage, GenericImageView, ImageBuffer, Rgba32FImage, RgbaImage, Pixel, Rgba};
+use image::{DynamicImage, GenericImageView, Rgba32FImage, RgbaImage, Rgba};
 use crate::utils::colour_utils::Colour4;
 
 pub(crate) fn upscale(image: DynamicImage, n:u32) -> DynamicImage {

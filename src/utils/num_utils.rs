@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 pub(crate) fn lerp(t: f32, from: f32, to: f32) -> f32 {
     (to - from) * t + from
 }
