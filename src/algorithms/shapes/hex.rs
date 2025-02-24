@@ -33,7 +33,7 @@ impl Generator for Hex {
         }
         let shapes = ShapeSet { objects: points };
 
-        shapes.generate(&args)
+        shapes.generate(args)
     }
 
     fn name() -> &'static str {"Hexagons"}
@@ -50,8 +50,8 @@ pub struct Hexagon {
 
 impl ShapeObject for Hexagon {
     fn sdf(&self, position: &Vec2) -> f32 {
-        let k2 = Vec2::new(-0.866025404, 0.5);
-        let z = 0.577350269;
+        let k2 = Vec2::new(-0.866_025_4, 0.5);
+        let z = 0.577_350_26;
         let s = self.size;
         let r = self.radius;
 
@@ -63,7 +63,7 @@ impl ShapeObject for Hexagon {
     }
 
     fn colour(&self) -> Rgb<f32> {
-        self.col.clone()
+        self.col
     }
 
     fn position_mut(&mut self) -> &mut Vec2 {
@@ -75,7 +75,7 @@ fn f32_min(x: f32, y: f32) -> f32 {
     if x > y {
         return y;
     }
-    return x;
+    x
 }
 
 fn sign(x: f32) -> f32 {

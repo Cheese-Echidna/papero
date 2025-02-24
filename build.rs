@@ -1,4 +1,3 @@
-use winres;
 
 #[cfg(target_os = "windows")]
 fn main() {

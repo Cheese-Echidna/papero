@@ -1,8 +1,6 @@
 use crate::utils::image_manager::Args;
 use glam::{UVec2, Vec2, Vec3};
 use image::{DynamicImage, GenericImage, Rgb, Rgb32FImage};
-use palette::named::BLACK;
-use crate::utils::colour_utils::into_f32;
 
 pub struct ShapeSet {
     pub(crate) objects: Vec<Box<dyn ShapeObject>>,
@@ -62,11 +60,11 @@ impl ShapeSet {
                         if d < 0.0 {
                             return Some(object.colour());
                         };
-                        return None;
+                        None
                     })
                     .collect::<Vec<Rgb<f32>>>();
 
-                if colours.len() > 0 {
+                if !colours.is_empty() {
                     let new_col = colours
                         .iter()
                         .map(|x| x.0)
@@ -98,7 +96,7 @@ impl ShapeObject for Ball {
     }
 
     fn colour(&self) -> Rgb<f32> {
-        self.colour.clone()
+        self.colour
     }
 
     fn position_mut(&mut self) -> &mut Vec2 {

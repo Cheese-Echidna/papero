@@ -1,33 +1,42 @@
+#![allow(dead_code)]
+
 use std::path::PathBuf;
 use std::time::Duration;
-use image::{ImageResult, Pixel};
+use image::{ImageResult};
 use strum::{EnumIter, IntoEnumIterator};
 use rayon::prelude::*;
 use crate::*;
 
+/// A struct that manages the running of generators, and the saving of images
 pub struct ImageManager {}
 
 impl ImageManager {
+    /// Saves the image to the path specified in args
     fn save(image: &DynamicImage, args: &Args, name: &str) -> ImageResult<()> {
         let output: RgbaImage = image.to_rgba8();
         let dir = Self::get_output_path(args, name);
         output.save(dir)
     }
 
+    /// Gets the name of the generator
     fn name<T: Generator>() -> &'static str {
         T::name()
     }
 
+    /// Runs the generator and sets the image as the wallpaper
     pub(crate) fn run_wallpaper<T: Generator>(args: &Args) {
         Self::run::<T>(args).unwrap();
-        Self::set_as_wallpaper(&args, T::name());
+        Self::set_as_wallpaper(args, T::name());
         println!("Set image as wallpaper");
     }
 
+    /// Gets the path to the output image
+    /// args.output_dir/name.png
     fn get_output_path(args: &Args, name: &str) -> PathBuf {
         args.output_dir.clone().join(format!("{}.png", name))
     }
 
+    /// Runs the generator and saves the image to the path specified in args
     pub(crate) fn run<T: Generator>(args: &Args) -> ImageResult<()> {
         let name = T::name();
         println!("Generating an image with {}", name);
@@ -35,10 +44,11 @@ impl ImageManager {
         let image = T::generate(args);
         println!("Finished generating image in {:?}", start.elapsed());
         let res = ImageManager::save(&image, args, name);
-        println!("Saved image to {}", ImageManager::get_output_path(&args, name).to_str().unwrap());
+        println!("Saved image to {}", ImageManager::get_output_path(args, name).to_str().unwrap());
         res
     }
 
+    /// Runs without print statements helpful for benchmarking and when running all
     pub(crate) fn run_silent<T: Generator>(args: &Args) -> (String, std::time::Duration) {
         let name = T::name();
         if std::fs::exists(Self::get_output_path(args, name)).unwrap_or(false) {
@@ -47,26 +57,29 @@ impl ImageManager {
         let start = std::time::Instant::now();
         let image = T::generate(args);
         let time = start.elapsed();
-        let res = ImageManager::save(&image, args, name);
+        let _res = ImageManager::save(&image, args, name);
         (name.to_string(), time)
     }
 
+    /// Sets the image at the given path as the wallpaper
     fn set_as_wallpaper(args: &Args, name: &str) {
         let path = Self::get_output_path(args, name);
         wallpaper::set_mode(wallpaper::Mode::Span).unwrap();
         wallpaper::set_from_path(path.to_str().unwrap()).unwrap();
     }
 
+    /// Run all generators at the same resolution in series
     pub(crate) fn run_all(args: &Args) {
         GeneratorTypes::iter().for_each(|x| {
             print!("{:<22}", x.name());
-            let (name, time) = x.run(args);
+            let (_name, time) = x.run(args);
             let secs = time.as_secs_f64();
             let (whole, fract) = (secs as u32, (secs.fract() * 100.) as u32);
             println!(" {:>3}.{:<2}s", whole, fract);
         });
     }
 
+    /// Run all generators at the same resolution in parallel
     pub(crate) fn run_all_fast(args: &Args) {
         let types = GeneratorTypes::iter().collect::<Vec<_>>();
         types.into_par_iter().for_each(|x| {
@@ -77,29 +90,29 @@ impl ImageManager {
         });
     }
 
-    pub(crate) fn run_and_upscale<T: Generator>(args: &Args, n: u32) -> ImageResult<()> {
+    /// Run the generator at a higher resolution and downscale it
+    /// Thus the output image will be args.width x args.height
+    /// Does nice anti-aliasing
+    pub(crate) fn run_at_higher_res_and_downscale<T: Generator>(args: &Args, n: u32) -> ImageResult<()> {
         if n == 0 {
             panic!("Cannot downscale by factor 0, how would we get it back again")
         }
-        if n == 1 {
-            return ImageManager::run::<T>(args)
-        }
-        assert_eq!(args.width % n, 0, "n must be a factor of the width");
-        assert_eq!(args.height % n, 0, "n must be a factor of the height");
 
-        let new_args = Args::new(args.width / n, args.height / n, args.output_dir.clone());
+        let args = Args::new(args.width * n, args.height * n, args.output_dir.clone());
         let name = T::name();
-        println!("Generating an image with {}, downscaled by factor {n}", name);
+        println!("Generating an image with {}, upscaled by factor {n}", name);
         let start = std::time::Instant::now();
-        let image = T::generate(&new_args);
+        let image = T::generate(&args);
         println!("Finished generating image in {:?}", start.elapsed());
-        println!("Upscaling image by factor {n}");
-        let new_image = utils::upscale::upscale(image, n);
-        let res = ImageManager::save(&new_image, args, name);
-        println!("Saved image to {}\\{}.png", ImageManager::get_output_path(&args, name).to_str().unwrap(), name);
+        let new_image = utils::upscale::downscale(image, n);
+        let res = ImageManager::save(&new_image, &args, name);
+        println!("Saved image to {}", ImageManager::get_output_path(&args, name).to_str().unwrap());
         res
     }
 
+    /// Runs the generator at a higher resolution
+    ///
+    /// It's nice when you want to specify one resolution, but receive another; or when you are testing several versions of an algorithm
     pub(crate) fn run_res_mult<T: Generator>(args: &Args, n: u32) -> ImageResult<()> {
         if n == 0 {
             panic!("Cannot downscale by factor 0, how would we get it back again")
@@ -110,12 +123,15 @@ impl ImageManager {
     }
 }
 
+// This trait is crazy
+// It generates a list of all the generators
+// See below
 macro_rules! generator_types {
     ( $( $variant:ident : $path:path ),+ $(,)? ) => {
         #[derive(EnumIter)]
         enum GeneratorTypes {
             $(
-                $variant($path),
+                $variant,
             )+
         }
 
@@ -123,7 +139,7 @@ macro_rules! generator_types {
             fn run(self, args: &Args) -> (String, std::time::Duration) {
                 match self {
                     $(
-                        GeneratorTypes::$variant(x) => {
+                        GeneratorTypes::$variant => {
                             ImageManager::run_silent::<$path>(args)
                         }
                     ),+
@@ -132,7 +148,7 @@ macro_rules! generator_types {
             fn name(&self) -> &str {
                 match self {
                     $(
-                        GeneratorTypes::$variant(x) => {
+                        GeneratorTypes::$variant => {
                             ImageManager::name::<$path>()
                         }
                     ),+
@@ -142,6 +158,7 @@ macro_rules! generator_types {
     }
 }
 
+/// Add your type and its path below
 generator_types! {
     Mandel:     algorithms::maths::mandel::Mandel,
     Hilbert:    algorithms::maths::hilbert::Hilbert,

@@ -25,8 +25,8 @@ impl Generator for Pinski {
             for mid in 0..args.width {
                 let right = mid + 1;
                 let left = mid - 1;
-                let left_v = u24_from_colour(&image.get_pixel_checked(left, row-1).unwrap_or(&black));
-                let right_v = u24_from_colour(&image.get_pixel_checked(right, row-1).unwrap_or(&black));
+                let left_v = u24_from_colour(image.get_pixel_checked(left, row-1).unwrap_or(&black));
+                let right_v = u24_from_colour(image.get_pixel_checked(right, row-1).unwrap_or(&black));
                 let sum = left_v + right_v;
 
                 let c = if sum%2 == 1 {
@@ -77,5 +77,5 @@ fn u24_from_colour(c: &Rgb<u8>) -> U24 {
     let r = c.0[0] as u32;
     let g = c.0[1] as u32;
     let b = c.0[2] as u32;
-    (r << 2*8) + (g << 1*8) + b
+    (r << (2*8)) + (g << 8) + b
 }

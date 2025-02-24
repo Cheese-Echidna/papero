@@ -1,5 +1,5 @@
 use std::cmp::min;
-use std::ops::{BitAnd, BitOr, BitXor};
+use std::ops::{BitXor};
 use image::DynamicImage;
 use crate::*;
 
@@ -39,7 +39,7 @@ fn f32ification(a:u32, b:u32) -> Rgb<u8> {
     let b = (b*MULT) as f32;
     let c = a+b;
 
-    let x:u32 = unsafe {std::mem::transmute(c)};
+    let x:u32 = c.to_bits();
     u32_to_colour(x)
 }
 
@@ -73,7 +73,7 @@ fn f64_colour(a:u32, b:u32) -> Rgb<u8> {
     let x = a as f64 / WIDTH as f64;
     let y = b as f64;
     let f = x.powf(y);
-    let h = (a as u128).pow(b) as f64 / (WIDTH as u128).pow(b) as f64;;
+    let h = (a as u128).pow(b) as f64 / (WIDTH as u128).pow(b) as f64;
 
     let r = (h - f + 0.5)*127.0;
     let g = 50;

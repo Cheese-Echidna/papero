@@ -1,7 +1,7 @@
 use std::f32::consts::{FRAC_PI_2, TAU};
-use glam::{UVec2, UVec4, Vec2, Vec4};
+use glam::{Vec2, Vec4};
 use image::{DynamicImage, GenericImageView, Rgba, Rgba32FImage};
-use rand::{random, Rng};
+use rand::Rng;
 use palette::named::BLACK;
 use crate::{Args, Generator};
 use crate::utils::colour_utils;
@@ -152,7 +152,7 @@ impl Generator for Flow {
 
         let lifetime = width + height;
 
-        let mut particles = ParticleSet::new(((width * height) as f32 * DENSITY) as usize, lifetime, &args);
+        let mut particles = ParticleSet::new(((width * height) as f32 * DENSITY) as usize, lifetime, args);
 
         particles.run(args)
     }

@@ -1,7 +1,5 @@
 use std::collections::HashSet;
 use num::complex::{Complex64, ComplexFloat};
-use palette::named::*;
-use palette::{convert, Clamp, IntoColor};
 use crate::*;
 use crate::utils::num_utils::lerp;
 

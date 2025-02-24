@@ -1,6 +1,5 @@
 use glam::Vec2;
-use palette::{IntoColor, LinSrgb};
-use rand::Rng;
+use palette::IntoColor;
 
 pub(crate) struct Particle {
     pub position: Vec2,

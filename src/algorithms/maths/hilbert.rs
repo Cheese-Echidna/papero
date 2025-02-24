@@ -1,5 +1,4 @@
 use crate::*;
-use fast_hilbert;
 
 #[derive(Default)]
 pub(crate) struct Hilbert;

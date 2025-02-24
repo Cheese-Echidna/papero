@@ -1,6 +1,4 @@
 use crate::*;
-use rayon::prelude::*;
-use num_utils::*;
 
 const BLACK: Rgb<f32> = Rgb([0.0, 0.0, 0.0]);
 

@@ -1,6 +1,8 @@
+#![allow(dead_code)]
+
+use glam::{Vec3, Vec4};
 use crate::*;
-use palette;
-use palette::{convert, Clamp, FromColor, IntoColor};
+use palette::{convert, Clamp, IntoColor};
 use rand::random;
 use crate::utils::num_utils::lerp;
 
@@ -135,6 +137,36 @@ impl<T: ColourType> ImageColour<T> for image::Rgba<T> {
     }
 }
 
+pub(crate) trait Colour3 {
+    fn to_vec3(self) -> glam::Vec3;
+    fn from_vec3(x: glam::Vec3) -> Self;
+}
+
+impl Colour3 for Rgb<f32> {
+    fn to_vec3(self) -> Vec3 {
+        Vec3::from_array(self.0)
+    }
+
+    fn from_vec3(x: Vec3) -> Self {
+        Self::from(x.to_array())
+    }
+}
+
+pub(crate) trait Colour4 {
+    fn to_vec4(self) -> Vec4;
+    fn from_vec4(x: Vec4) -> Self;
+}
+
+impl Colour4 for Rgba<f32> {
+    fn to_vec4(self) -> Vec4 {
+        Vec4::from_array(self.0)
+    }
+
+    fn from_vec4(x: Vec4) -> Self {
+        Self::from(x.to_array())
+    }
+}
+
 /// All in range [0,1]
 pub(crate) fn convert_from_ok_hsl(h: f32, s:f32, l: f32) -> Rgb<f32> {
     let ok = palette::Okhsl::from_components((h*360.0, s, l));
@@ -229,13 +261,14 @@ pub(crate) fn random_colour() -> Rgb<f32> {
 pub fn random_ok_rgb_f32() -> Rgb<f32> {
     let mut rng = rand::thread_rng();
 
-    let mut rand = || rng.gen_range((0.0)..(1.0));
+    let mut rand = || rng.gen_range((0.0)..1.0);
 
     colour_utils::convert_from_ok_hsl(rand(), rand(), rand())
 }
 
 pub fn random_pretty_ok() -> Rgb<f32> {
     let mut rng = rand::thread_rng();
+    let mut range = || rng.gen_range(0.2_f32..0.8);
 
-    colour_utils::convert_from_ok_hsl(rng.gen_range((0.0)..(1.0)), rng.gen_range((0.2)..(0.8)), rng.gen_range((0.2)..(0.8)))
+    colour_utils::convert_from_ok_hsl(range(), range(), range())
 }
