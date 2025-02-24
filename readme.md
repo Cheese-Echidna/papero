@@ -7,7 +7,7 @@ This repo is a culmination of various different iterations of this idea of the y
 
 Enjoy the best results below.
 
-PS: In order to create this file just run `cargo test`
+PS: In order to create this file just run `cargo test --release -- nocapture`
 
 ---
 
@@ -44,6 +44,12 @@ Hexagons
 Hilbert Curve
 
 ![Hilbert Curve.png](demo/Hilbert%20Curve.png)
+
+---
+
+Julia (Jazzmine)
+
+![Julia (Jazzmine).png](demo/Julia%20(Jazzmine).png)
 
 ---
 
