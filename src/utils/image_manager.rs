@@ -200,6 +200,11 @@ impl Args {
             output_dir: dir.into(),
         }
     }
+
+    pub(crate) fn output_dir(&self) -> PathBuf {
+        self.output_dir.clone()
+    }
+
     pub(crate) fn wh(&self) -> (u32, u32) {
         (self.width, self.height)
     }

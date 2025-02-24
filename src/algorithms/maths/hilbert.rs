@@ -3,8 +3,8 @@ use crate::*;
 #[derive(Default)]
 pub(crate) struct Hilbert;
 
-impl Generator for Hilbert {
-    fn generate(args: &Args) -> DynamicImage {
+impl Hilbert {
+    fn private_generate(args: &Args) -> DynamicImage {
         let (width, height) = (args.width, args.height);
         if width > u16::MAX as u32 {
             panic!("Too wide")
@@ -47,6 +47,14 @@ impl Generator for Hilbert {
         }
 
         image.into()
+    }
+}
+
+impl Generator for Hilbert {
+    fn generate(args: &Args) -> DynamicImage {
+        let dim = 2_u32.pow(args.height.max(args.width).ilog2() - 3);
+        let mut args = Args::new(dim, dim, args.output_dir());
+        Hilbert::private_generate(&args)
     }
 
     fn name() -> &'static str {
