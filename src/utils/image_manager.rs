@@ -172,6 +172,7 @@ generator_types! {
     Mandel:     algorithms::maths::mandel::Mandel,
     Hilbert:    algorithms::maths::hilbert::Hilbert,
     Pinski:     algorithms::maths::pinski::Pinski,
+    Julia:      algorithms::maths::julia::Julia,
     //
     Domain:     algorithms::particle::domain::DomainWarping,
     Flow:       algorithms::particle::flow::Flow,
