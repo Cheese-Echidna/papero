@@ -17,7 +17,7 @@ impl Generator for NoiseRender {
 
         let (width, height) = args.wh();
 
-        let scale_factor = 1.0;
+        let scale_factor = 2.0;
         let noise: Fbm<OpenSimplex> = Fbm::new(0).set_octaves(5);
 
         for py in 0..height {
