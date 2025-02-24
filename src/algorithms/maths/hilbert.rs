@@ -53,8 +53,10 @@ impl Hilbert {
 impl Generator for Hilbert {
     fn generate(args: &Args) -> DynamicImage {
         let dim = 2_u32.pow(args.height.max(args.width).ilog2() - 3);
+        let ratio = (args.width as f32 / dim as f32) as u32;
         let mut args = Args::new(dim, dim, args.output_dir());
-        Hilbert::private_generate(&args)
+        let image = Hilbert::private_generate(&args);
+        utils::upscale::upscale(image, ratio)
     }
 
     fn name() -> &'static str {
