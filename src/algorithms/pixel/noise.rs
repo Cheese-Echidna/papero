@@ -42,14 +42,11 @@ impl Generator for NoiseRender {
                 ]) as f32
                     + 0.5;
 
-                let v1 = multistep(v1, 5);
-                let v2 = multistep(v2, 5);
+                let v1 = multistep(v1, 2) + 0.5;
+                let v2 = multistep(v2, 2) + 0.5;
 
-                let c1 = Vec3::new(0.81_f32, 0.56_f32, 0.43_f32) * v1 * 0.5;
-                // let c1 = Vec3::new(1.0, 0.0_f32, 0.0_f32) * v1 * 0.5;
-                let c2 = Vec3::new(0.22_f32, 0.28_f32, 0.17_f32) * v2;
-                // let c2 = Vec3::new(0.0_f32, 1.0_f32, 1.0_f32) * v2 * 0.5;
-                // rgb(57, 67, 43)
+                let c1 = Vec3::new(0.81_f32, 0.56_f32, 0.43_f32) * 0.5 * v1;
+                let c2 = Vec3::new(0.22_f32, 0.28_f32, 0.17_f32) * 0.5 * v2;
 
                 let colour = c1 + c2;
                 // let colour = c1 * 2.0;
