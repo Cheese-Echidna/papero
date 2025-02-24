@@ -1,4 +1,4 @@
-use glam::Vec2;
+use glam::{DVec2, Vec2};
 use image::{DynamicImage, RgbImage, RgbaImage};
 use crate::algorithms::particle::particle::Particle;
 use crate::{utils, Generator};
@@ -15,12 +15,14 @@ impl Generator for DomainWarping {
 
         let seed = 0;
 
-        let f = FBM::new(seed, 5);
-        let g = FBM::new(seed + 1, 5);
+        let f = |x, scale| utils::noise::fbm(seed,          scale, 5, x);
+        let g = |x, scale| utils::noise::fbm(seed + 1, scale, 5, x);
+
+
 
         let domain_warp = |v: Vec2, scale: f32, shove: f32| {
-            let x = f.get(v * scale + Vec2::new(0.1122, 0.6995));
-            let y = g.get(v * scale + Vec2::new(0.5577, 0.1295));
+            let x = f(v.as_dvec2(), scale as f64);
+            let y = g(v.as_dvec2(), scale as f64);
             v + Vec2::new(x as f32, y as f32) * shove
         };
 
@@ -58,27 +60,5 @@ impl Generator for DomainWarping {
 
     fn name() -> &'static str {
         "Domain Warping"
-    }
-}
-
-struct FBM {
-    n: u32,
-    seed: u32,
-    noise_fn: OpenSimplex
-}
-
-impl FBM {
-    fn new(seed: u32, n: u32) -> Self {
-        FBM { seed, n, noise_fn: OpenSimplex::new(seed) }
-    }
-}
-
-impl FBM {
-    fn get(&self, point: Vec2) -> f64 {
-        let mut v = 0.;
-        for i in 0..self.n {
-            v += self.noise_fn.get([point.x as f64, point.y as f64]) * 2_f64.powi(-(i as i32));
-        }
-        v
     }
 }

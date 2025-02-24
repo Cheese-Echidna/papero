@@ -1,5 +1,5 @@
 use std::cmp::min;
-use std::ops::{BitAnd, BitOr, BitXor};
+use std::ops::{BitXor};
 use image::DynamicImage;
 use crate::*;
 

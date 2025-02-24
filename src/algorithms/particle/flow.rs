@@ -152,7 +152,7 @@ impl Generator for Flow {
 
         let lifetime = width + height;
 
-        let mut particles = ParticleSet::new(((width * height) as f32 * DENSITY) as usize, lifetime, &args);
+        let mut particles = ParticleSet::new(((width * height) as f32 * DENSITY) as usize, lifetime, args);
 
         particles.run(args)
     }
