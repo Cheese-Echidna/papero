@@ -2,6 +2,7 @@ use crate::utils::num_utils::lerp;
 use crate::*;
 use num::complex::{Complex64, ComplexFloat};
 use std::collections::HashSet;
+use palette::num::Sqrt;
 
 #[derive(Default)]
 pub(crate) struct Mandel;
@@ -24,10 +25,13 @@ impl Generator for Mandel {
                 let c = 1.0 / c;
 
 
-                let (dist_bound, iter_bound) = (2.0, 50);
+                let (dist_bound, iter_bound) = (2.0, 40);
 
                 let (_res, i) = escape(c, dist_bound, iter_bound);
-                let i = 1.0 - i as f32 / iter_bound as f32;
+
+                let i = (i as f32 / iter_bound as f32);
+
+                let i = 1.0 - i;
 
                 let h_start = 340.0/360.0;
                 let h_end = 200.0/360.0;

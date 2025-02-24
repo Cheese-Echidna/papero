@@ -21,8 +21,8 @@ impl Generator for Julia {
 
                 let i = quadratic_iteration(c, z, max) as f32 / max as f32;
 
-                let h_start = 300.0;
-                let h_end = 190.0;
+                let h_start = 300.0 / 360.0;
+                let h_end = 190.0 / 360.0;
 
                 let s_start = 0.8;
                 let s_end = 1.0;
@@ -30,7 +30,7 @@ impl Generator for Julia {
                 let l_start = 0.3;
                 let l_end = 0.8;
 
-                let hue = (h_start + i * (h_end - h_start)) / 360.0;
+                let hue = (h_start + i * (h_end - h_start));
                 let saturation = s_start + i * (s_end - s_start);
                 let lightness = l_start + i * (l_end - l_start);
 

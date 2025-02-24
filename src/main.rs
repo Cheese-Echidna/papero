@@ -17,7 +17,7 @@ trait Generator: Default {
 
 fn main() {
     let a = Args::new(1920, 1080, "./out");
-    ImageManager::run::<algorithms::pixel::noise::NoiseRender>(&a).unwrap();
+    ImageManager::run::<algorithms::maths::mandel::Mandel>(&a).unwrap();
 }
 
 #[cfg(test)]
@@ -25,7 +25,6 @@ mod tests {
     use super::*;
     use std::fs;
     use std::path::PathBuf;
-    use std::str::FromStr;
 
     #[test]
     fn all_images() {
