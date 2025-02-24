@@ -94,11 +94,11 @@ impl<T: ColourType> ImageColour<T> for image::Rgb<T> {
         self
     }
 
-    fn to_u8(self) -> impl ImageColour<u8> {
+    fn to_u8(self) -> Rgb<u8> {
         Rgb(self.0.map(|x| x.to_u8()))
     }
 
-    fn to_f32(self) -> impl ImageColour<f32> {
+    fn to_f32(self) -> Rgb<f32> {
         Rgb(self.0.map(|x| x.to_f32()))
     }
 }
@@ -127,11 +127,11 @@ impl<T: ColourType> ImageColour<T> for image::Rgba<T> {
         Rgb([r, g, b])
     }
 
-    fn to_u8(self) -> impl ImageColour<u8> {
+    fn to_u8(self) -> Rgba<u8> {
         Rgba(self.0.map(|x| x.to_u8()))
     }
 
-    fn to_f32(self) -> impl ImageColour<f32> {
+    fn to_f32(self) -> Rgba<f32> {
         Rgba(self.0.map(|x| x.to_f32()))
     }
 }

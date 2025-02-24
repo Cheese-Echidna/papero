@@ -1,12 +1,12 @@
 use crate::utils::colour_utils;
 use crate::utils::colour_utils::ImageColour;
+use crate::utils::noise::BetterFbm;
 use crate::{Args, Generator};
 use glam::{Vec2, Vec4};
 use image::{DynamicImage, GenericImageView, Rgba, Rgba32FImage};
 use palette::named::BLACK;
 use rand::Rng;
 use std::f32::consts::{FRAC_PI_2, TAU};
-use crate::utils::noise::BetterFbm;
 
 const NOISE_SCALE: f64 = 0.002;
 pub(crate) const FORCE_SCALE: f32 = 1.;
@@ -19,7 +19,7 @@ struct Particle {
     dead: bool,
     col: Rgba<f32>,
     lifetime: usize,
-    t: bool
+    t: bool,
 }
 
 impl Particle {
@@ -104,8 +104,7 @@ impl ParticleSet {
             // let px = size.x * -0.2;
             // let py = rng.gen_range((size.y * -0.2)..(size.y * 1.2));
 
-            let col = colour_utils::sick_gradient(px / size.x, py / size.y)
-                .with_alpha_of(0.35);
+            let col = colour_utils::sick_gradient(px / size.x, py / size.y).with_alpha_of(0.35);
 
             particles.push(Particle::new(Vec2::new(px, py), lifetime, col, false));
             particles.push(Particle::new(Vec2::new(px, py), lifetime, col, true));
@@ -241,4 +240,3 @@ fn blend(bg: Rgba<f32>, fg: Rgba<f32>) -> Rgba<f32> {
 // }
 //
 // noise_image.save("perlin.png");
-

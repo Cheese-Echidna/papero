@@ -1,8 +1,8 @@
 use crate::utils::num_utils::lerp;
 use crate::*;
 use num::complex::{Complex64, ComplexFloat};
-use std::collections::HashSet;
 use palette::num::Sqrt;
+use std::collections::HashSet;
 
 #[derive(Default)]
 pub(crate) struct Mandel;
@@ -24,7 +24,6 @@ impl Generator for Mandel {
                 let c = Complex64::new(x, y).scale(mandel_width) + centre;
                 let c = 1.0 / c;
 
-
                 let (dist_bound, iter_bound) = (2.0, 40);
 
                 let (_res, i) = escape(c, dist_bound, iter_bound);
@@ -33,8 +32,8 @@ impl Generator for Mandel {
 
                 let i = 1.0 - i;
 
-                let h_start = 340.0/360.0;
-                let h_end = 200.0/360.0;
+                let h_start = 340.0 / 360.0;
+                let h_end = 200.0 / 360.0;
 
                 let s_start = 1.0;
                 let s_end = 0.7;
@@ -61,7 +60,6 @@ impl Generator for Mandel {
 }
 
 fn escape(c: Complex64, escaped: f64, limit: u32) -> (Complex64, u32) {
-
     let mut num = 0_u32;
     let mut z = c;
 

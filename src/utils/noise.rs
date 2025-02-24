@@ -1,8 +1,8 @@
-use std::f32::consts::{FRAC_PI_2, TAU};
 use glam::f64::DVec2;
-use noise::{Fbm, MultiFractal, NoiseFn, OpenSimplex};
-use std::f64::consts::{FRAC_1_PI, FRAC_1_SQRT_2};
 use glam::Vec2;
+use noise::{Fbm, MultiFractal, NoiseFn, OpenSimplex};
+use std::f32::consts::{FRAC_PI_2, TAU};
+use std::f64::consts::{FRAC_1_PI, FRAC_1_SQRT_2};
 
 /// Fractional Brownian motion (FBM) noise is a fractal like noise
 ///
@@ -15,11 +15,11 @@ pub struct BetterFbm {
     fbm: Fbm<OpenSimplex>,
     scale: f64,
     octaves: usize,
-    seed: u32
+    seed: u32,
 }
 
 impl BetterFbm {
-    pub fn get(&self, x:DVec2) -> f64 {
+    pub fn get(&self, x: DVec2) -> f64 {
         let offset = DVec2::new(FRAC_1_PI, FRAC_1_SQRT_2);
         self.fbm.get((x * self.scale + offset).to_array())
     }
