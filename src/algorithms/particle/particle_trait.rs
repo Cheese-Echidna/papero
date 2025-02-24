@@ -3,7 +3,7 @@ use palette::IntoColor;
 
 pub(crate) struct Particle {
     pub position: Vec2,
-    pub colour: palette::LinSrgb<f32>
+    pub colour: palette::LinSrgb<f32>,
 }
 
 impl Particle {
@@ -14,4 +14,3 @@ impl Particle {
         }
     }
 }
-

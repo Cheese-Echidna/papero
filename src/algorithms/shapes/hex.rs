@@ -36,7 +36,9 @@ impl Generator for Hex {
         shapes.generate(args)
     }
 
-    fn name() -> &'static str {"Hexagons"}
+    fn name() -> &'static str {
+        "Hexagons"
+    }
 }
 
 // Note for now we are only doing pointy top hexagons

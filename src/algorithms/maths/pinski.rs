@@ -1,9 +1,8 @@
-use palette::named::{BLACK, WHITE};
-use crate::*;
 use crate::utils::colour_utils::ImageColour;
+use crate::*;
+use palette::named::{BLACK, WHITE};
 
 type U24 = u32;
-
 
 #[derive(Default)]
 pub(crate) struct Pinski {}
@@ -14,29 +13,26 @@ impl Generator for Pinski {
         let white = Rgb::<u8>::from_const(WHITE);
         let mut image = args.image_u8(black);
 
-
         // for i in 0..(args.width/3) {
         //     image.put_pixel(i*3,0,white);
         // }
 
-        image.put_pixel(args.width/2-1, 0, white);
+        image.put_pixel(args.width / 2 - 1, 0, white);
 
         for row in 1..args.height {
             for mid in 0..args.width {
                 let right = mid + 1;
                 let left = mid - 1;
-                let left_v = u24_from_colour(image.get_pixel_checked(left, row-1).unwrap_or(&black));
-                let right_v = u24_from_colour(image.get_pixel_checked(right, row-1).unwrap_or(&black));
+                let left_v =
+                    u24_from_colour(image.get_pixel_checked(left, row - 1).unwrap_or(&black));
+                let right_v =
+                    u24_from_colour(image.get_pixel_checked(right, row - 1).unwrap_or(&black));
                 let sum = left_v + right_v;
 
-                let c = if sum%2 == 1 {
-                    white
-                } else {
-                    black
-                };
+                let c = if sum % 2 == 1 { white } else { black };
 
                 // let c = colour_from_u24(sum);
-                image.put_pixel(mid,row,c)
+                image.put_pixel(mid, row, c)
             }
         }
 
@@ -47,7 +43,6 @@ impl Generator for Pinski {
         "Sierpiński's Triangle"
     }
 }
-
 
 // pub fn create2(config: Config) -> RgbaImage {
 //     let mut image = Hsva01Image::new(config.width, config.height, Hsva01::new(0.0,1.0,1.0,1.0));
@@ -64,7 +59,7 @@ impl Generator for Pinski {
 //             // } else {
 //             //     Rgb::<u8>::black()
 //             // };
-// 
+//
 //             // println!("({}, {}):  {} + {} = {}", mid, row, left_v, right_v, sum);
 //             let c = Hsva01::new(h_new, 1.0, 1.0, 1.0);
 //             image.set_pixel(mid,row,c).unwrap()
@@ -77,5 +72,5 @@ fn u24_from_colour(c: &Rgb<u8>) -> U24 {
     let r = c.0[0] as u32;
     let g = c.0[1] as u32;
     let b = c.0[2] as u32;
-    (r << (2*8)) + (g << 8) + b
+    (r << (2 * 8)) + (g << 8) + b
 }

@@ -12,7 +12,6 @@ pub struct Ball {
     radius: f32,
 }
 
-
 pub trait ShapeObject: Send + Sync {
     fn sdf(&self, position: &Vec2) -> f32;
 

@@ -25,4 +25,3 @@ impl Generator for Boring {
         "Boring gradient test"
     }
 }
-

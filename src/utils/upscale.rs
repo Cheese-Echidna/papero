@@ -1,11 +1,11 @@
 #![allow(dead_code)]
-use glam::Vec4;
-use image::{DynamicImage, GenericImageView, Rgba32FImage, RgbaImage, Rgba};
 use crate::utils::colour_utils::Colour4;
+use glam::Vec4;
+use image::{DynamicImage, GenericImageView, Rgba, Rgba32FImage, RgbaImage};
 
-pub(crate) fn upscale(image: DynamicImage, n:u32) -> DynamicImage {
-    let (old_w, old_h) =  (image.width(), image.height());
-    let (w,h) = (old_w * n, old_h * n);
+pub(crate) fn upscale(image: DynamicImage, n: u32) -> DynamicImage {
+    let (old_w, old_h) = (image.width(), image.height());
+    let (w, h) = (old_w * n, old_h * n);
     let mut new_image = RgbaImage::new(w, h);
     for px in 0..old_w {
         for py in 0..old_h {
@@ -16,9 +16,9 @@ pub(crate) fn upscale(image: DynamicImage, n:u32) -> DynamicImage {
     new_image.into()
 }
 
-pub fn downscale(image: DynamicImage, n:u32) -> DynamicImage {
+pub fn downscale(image: DynamicImage, n: u32) -> DynamicImage {
     let old_image = image.to_rgba32f();
-    let (w,h) = image.dimensions();
+    let (w, h) = image.dimensions();
     let mut new_image = Rgba32FImage::new(w / n, h / n);
     for px in 0..(w / n) {
         for py in 0..(h / n) {
@@ -38,7 +38,7 @@ pub fn downscale(image: DynamicImage, n:u32) -> DynamicImage {
     new_image.into()
 }
 
-fn write_all(image: &mut RgbaImage, pixel: image::Rgba<u8>, (px, py): (u32, u32), n:u32) {
+fn write_all(image: &mut RgbaImage, pixel: image::Rgba<u8>, (px, py): (u32, u32), n: u32) {
     let (sx, sy) = (px * n, py * n);
     for dx in 0..n {
         for dy in 0..n {

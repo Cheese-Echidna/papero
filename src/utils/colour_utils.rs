@@ -1,10 +1,10 @@
 #![allow(dead_code)]
 
-use glam::{Vec3, Vec4};
+use crate::utils::num_utils::lerp;
 use crate::*;
+use glam::{Vec3, Vec4};
 use palette::{convert, Clamp, IntoColor};
 use rand::random;
-use crate::utils::num_utils::lerp;
 
 pub(crate) trait ImageColour<T: ColourType>: Sized {
     fn from_const(named: palette::Srgb<u8>) -> Self {
@@ -79,7 +79,6 @@ impl<T: ColourType> ImageColour<T> for image::Rgb<T> {
     fn from_f32(colour: impl ImageColour<f32>) -> Self {
         Rgb(colour.without_alpha().0.map(|x| T::from_f32(x)))
     }
-
 
     fn with_alpha(self) -> image::Rgba<T> {
         let [r, g, b] = self.0;
@@ -168,28 +167,20 @@ impl Colour4 for Rgba<f32> {
 }
 
 /// All in range [0,1]
-pub(crate) fn convert_from_ok_hsl(h: f32, s:f32, l: f32) -> Rgb<f32> {
-    let ok = palette::Okhsl::from_components((h*360.0, s, l));
+pub(crate) fn convert_from_ok_hsl(h: f32, s: f32, l: f32) -> Rgb<f32> {
+    let ok = palette::Okhsl::from_components((h * 360.0, s, l));
     let srgb: palette::Srgb = convert::FromColorUnclamped::from_color_unclamped(ok);
     let srgb = srgb.clamp();
-    Rgb([
-        srgb.red,
-        srgb.green,
-        srgb.blue
-    ])
+    Rgb([srgb.red, srgb.green, srgb.blue])
 }
 
 /// All in range [0,1]
-pub(crate) fn convert_from_ok_hsv(h: f32, s:f32, v: f32) -> Rgb<f32> {
-    let ok = palette::Okhsv::from_components((h*360.0, s, v));
+pub(crate) fn convert_from_ok_hsv(h: f32, s: f32, v: f32) -> Rgb<f32> {
+    let ok = palette::Okhsv::from_components((h * 360.0, s, v));
     let srgb: palette::Srgb = convert::FromColorUnclamped::from_color_unclamped(ok);
     let srgb = srgb.clamp();
 
-    Rgb([
-        srgb.red,
-        srgb.green,
-        srgb.blue
-    ])
+    Rgb([srgb.red, srgb.green, srgb.blue])
 }
 
 pub(crate) fn sick_gradient(x: f32, y: f32) -> Rgb<f32> {
@@ -234,7 +225,6 @@ where
 
     image::Rgb::from([clamped.red, clamped.green, clamped.blue])
 }
-
 
 pub(crate) fn into_no_alpha<C>(color: C) -> image::Rgb<u8>
 where

@@ -1,7 +1,7 @@
-use std::collections::HashSet;
-use num::complex::{Complex64, ComplexFloat};
-use crate::*;
 use crate::utils::num_utils::lerp;
+use crate::*;
+use num::complex::{Complex64, ComplexFloat};
+use std::collections::HashSet;
 
 #[derive(Default)]
 pub(crate) struct Mandel;
@@ -13,10 +13,13 @@ impl Generator for Mandel {
 
         for py in 0..args.height {
             for px in 0..args.width {
-                let centre = Complex64::new(1.4 ,0.0);
+                let centre = Complex64::new(1.4, 0.0);
                 let mandel_width = 6.0;
 
-                let (x,y) = ((px as f64 / width - 0.5), -((py as f64 / height - 0.5) * height / width));
+                let (x, y) = (
+                    (px as f64 / width - 0.5),
+                    -((py as f64 / height - 0.5) * height / width),
+                );
                 let c = Complex64::new(x, y).scale(mandel_width) + centre;
 
                 let (dist_bound, iter_bound) = (2.0, 200);
@@ -24,17 +27,15 @@ impl Generator for Mandel {
                 let colour = escape_rgb(c.recip(), dist_bound, iter_bound);
 
                 image.put_pixel(px, py, colour);
-            };
-        };
+            }
+        }
 
         image.into()
     }
 
-
     fn name() -> &'static str {
         "Mandelbrot"
     }
-
 }
 
 fn escape(c: Complex64, escaped: f64, limit: u32) -> (Complex64, u32) {
@@ -48,7 +49,7 @@ fn escape(c: Complex64, escaped: f64, limit: u32) -> (Complex64, u32) {
 
     while z.norm_sqr() < escaped_sqr && num < limit {
         if set.contains(&bits(z)) {
-            return (z, limit)
+            return (z, limit);
         }
         z = z.powu(2) + c;
         num += 1;
@@ -87,7 +88,6 @@ fn escape_rgb(c: Complex64, escaped: f64, limit: u32) -> Rgb<f32> {
     Rgb([1.0, 1.0, 1.0])
 }
 
-
 fn bits(z: Complex64) -> u128 {
     let b1 = z.re.to_bits();
     let b2 = z.im.to_bits();
@@ -98,8 +98,8 @@ fn smoothstep(x: f32) -> f32 {
     3.0 * x.powi(2) - 2.0 * x.powi(3)
 }
 
-fn steepstep(x:f32) -> f32 {
-    let semi = |a:f32| (a*(1.0-a)).sqrt();
+fn steepstep(x: f32) -> f32 {
+    let semi = |a: f32| (a * (1.0 - a)).sqrt();
     if x <= 0.5 {
         semi(x)
     } else {

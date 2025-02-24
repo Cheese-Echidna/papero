@@ -30,7 +30,7 @@ impl Generator for Julia {
                 let l_start = 0.3;
                 let l_end = 0.8;
 
-                let hue = (h_start + i * (h_end - h_start))/360.0;
+                let hue = (h_start + i * (h_end - h_start)) / 360.0;
                 let saturation = s_start + i * (s_end - s_start);
                 let lightness = l_start + i * (l_end - l_start);
 
@@ -52,6 +52,6 @@ fn quadratic_iteration(c: Complex64, mut z: Complex64, max: u32) -> u32 {
             return i;
         }
         z = z.powu(2) + c;
-    };
+    }
     max
 }

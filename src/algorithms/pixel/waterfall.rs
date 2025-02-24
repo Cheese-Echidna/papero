@@ -1,5 +1,5 @@
-use std::f32::consts::PI;
 use crate::*;
+use std::f32::consts::PI;
 
 #[derive(Default)]
 pub(crate) struct Waterfall;
@@ -15,7 +15,11 @@ impl Generator for Waterfall {
                 let x_prop = (x as f32) / (args.width as f32) * PI;
 
                 let color = if y == 0 {
-                    Rgb::<f32>([x_prop.sin().abs(), x_prop.cos().abs(), x_prop.tan().abs().clamp(0.0, 1.0)])
+                    Rgb::<f32>([
+                        x_prop.sin().abs(),
+                        x_prop.cos().abs(),
+                        x_prop.tan().abs().clamp(0.0, 1.0),
+                    ])
                 } else {
                     Self::iteration(&image, y, x, args.width)
                 };
@@ -38,18 +42,28 @@ impl Waterfall {
         ((-1_i32)..=1)
             .map(|i| (x - 1).rem_euclid(width)) // rem_euclid means it doesn't stay negative
             .for_each(|new_x| {
-                let (px, py) = (new_x as u32, y-1);
-                image.get_pixel(px, py).0.iter().enumerate().for_each(|(i, value)| {
-                    output[i].push(*value);
-                });
+                let (px, py) = (new_x as u32, y - 1);
+                image
+                    .get_pixel(px, py)
+                    .0
+                    .iter()
+                    .enumerate()
+                    .for_each(|(i, value)| {
+                        output[i].push(*value);
+                    });
             });
 
-        let (r,g,b) = (&output[0], &output[1], &output[2]);
-
+        let (r, g, b) = (&output[0], &output[1], &output[2]);
 
         // The integral of these functions needs to be ~= 0.5 so that the drift is negligible.
-        let red = (r[0] * 0.5 + r[1] * 0.3 + r[2] * 0.2).sin().abs().clamp(0.0, 1.0);
-        let green = (g[0] * 0.5 + g[1] * 0.3 + g[2] * 0.2).cos().abs().clamp(0.0, 1.0);
+        let red = (r[0] * 0.5 + r[1] * 0.3 + r[2] * 0.2)
+            .sin()
+            .abs()
+            .clamp(0.0, 1.0);
+        let green = (g[0] * 0.5 + g[1] * 0.3 + g[2] * 0.2)
+            .cos()
+            .abs()
+            .clamp(0.0, 1.0);
         let blue = ((b[0] + b[1] + b[2]) / 5.0).sqrt().abs().clamp(0.0, 1.0);
         Rgb::<f32>([red, green, blue])
     }

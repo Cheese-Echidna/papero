@@ -1,11 +1,11 @@
-use std::f32::consts::{FRAC_PI_2, TAU};
-use glam::{Vec2, Vec4};
-use image::{DynamicImage, GenericImageView, Rgba, Rgba32FImage};
-use rand::Rng;
-use palette::named::BLACK;
-use crate::{Args, Generator};
 use crate::utils::colour_utils;
 use crate::utils::colour_utils::ImageColour;
+use crate::{Args, Generator};
+use glam::{Vec2, Vec4};
+use image::{DynamicImage, GenericImageView, Rgba, Rgba32FImage};
+use palette::named::BLACK;
+use rand::Rng;
+use std::f32::consts::{FRAC_PI_2, TAU};
 
 const NOISE_SCALE: f64 = 0.002;
 const FORCE_SCALE: f32 = 1.;
@@ -86,7 +86,8 @@ impl ParticleSet {
             let py = rng.gen_range(0.0..(size.1 as f32));
 
             // Gabe stuff
-            let col = colour_utils::sick_gradient(px / size.0 as f32, py / size.1 as f32).with_alpha_of(0.35);
+            let col = colour_utils::sick_gradient(px / size.0 as f32, py / size.1 as f32)
+                .with_alpha_of(0.35);
 
             particles.push(Particle::new(Vec2::new(px, py), lifetime, col));
         }
@@ -122,7 +123,6 @@ impl ParticleSet {
         self.particles.iter().filter(|p| !p.dead).count()
     }
 
-
     // main loop
     fn run(&mut self, args: &Args) -> DynamicImage {
         let mut image = args.image_f32_alpha(Rgba::<f32>::from_const(BLACK));
@@ -152,7 +152,8 @@ impl Generator for Flow {
 
         let lifetime = width + height;
 
-        let mut particles = ParticleSet::new(((width * height) as f32 * DENSITY) as usize, lifetime, args);
+        let mut particles =
+            ParticleSet::new(((width * height) as f32 * DENSITY) as usize, lifetime, args);
 
         particles.run(args)
     }

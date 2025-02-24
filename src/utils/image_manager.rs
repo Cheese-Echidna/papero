@@ -1,11 +1,11 @@
 #![allow(dead_code)]
 
+use crate::*;
+use image::ImageResult;
+use rayon::prelude::*;
 use std::path::PathBuf;
 use std::time::Duration;
-use image::{ImageResult};
 use strum::{EnumIter, IntoEnumIterator};
-use rayon::prelude::*;
-use crate::*;
 
 /// A struct that manages the running of generators, and the saving of images
 pub struct ImageManager {}
@@ -44,7 +44,10 @@ impl ImageManager {
         let image = T::generate(args);
         println!("Finished generating image in {:?}", start.elapsed());
         let res = ImageManager::save(&image, args, name);
-        println!("Saved image to {}", ImageManager::get_output_path(args, name).to_str().unwrap());
+        println!(
+            "Saved image to {}",
+            ImageManager::get_output_path(args, name).to_str().unwrap()
+        );
         res
     }
 
@@ -52,7 +55,7 @@ impl ImageManager {
     pub(crate) fn run_silent<T: Generator>(args: &Args) -> (String, std::time::Duration) {
         let name = T::name();
         if std::fs::exists(Self::get_output_path(args, name)).unwrap_or(false) {
-            return (format!("Skipped {name}"), Duration::from_micros(0))
+            return (format!("Skipped {name}"), Duration::from_micros(0));
         }
         let start = std::time::Instant::now();
         let image = T::generate(args);
@@ -93,7 +96,10 @@ impl ImageManager {
     /// Run the generator at a higher resolution and downscale it
     /// Thus the output image will be args.width x args.height
     /// Does nice anti-aliasing
-    pub(crate) fn run_at_higher_res_and_downscale<T: Generator>(args: &Args, n: u32) -> ImageResult<()> {
+    pub(crate) fn run_at_higher_res_and_downscale<T: Generator>(
+        args: &Args,
+        n: u32,
+    ) -> ImageResult<()> {
         if n == 0 {
             panic!("Cannot downscale by factor 0, how would we get it back again")
         }
@@ -106,7 +112,10 @@ impl ImageManager {
         println!("Finished generating image in {:?}", start.elapsed());
         let new_image = utils::upscale::downscale(image, n);
         let res = ImageManager::save(&new_image, &args, name);
-        println!("Saved image to {}", ImageManager::get_output_path(&args, name).to_str().unwrap());
+        println!(
+            "Saved image to {}",
+            ImageManager::get_output_path(&args, name).to_str().unwrap()
+        );
         res
     }
 
@@ -174,7 +183,7 @@ generator_types! {
     Spiral:     algorithms::pixel::spiral::Spiral,
     Waterfall:  algorithms::pixel::waterfall::Waterfall,
     //
-    Hex:        algorithms::shapes::hex::Hex
+    Hex:        algorithms::shapes::hex::Hex,
 }
 
 pub(crate) struct Args {
@@ -191,7 +200,9 @@ impl Args {
             output_dir: dir.into(),
         }
     }
-    pub(crate) fn wh(&self) -> (u32, u32) {(self.width, self.height)}
+    pub(crate) fn wh(&self) -> (u32, u32) {
+        (self.width, self.height)
+    }
 
     pub(crate) fn image_u8(&self, colour: Rgb<u8>) -> RgbImage {
         let mut image = RgbImage::new(self.width, self.height);
