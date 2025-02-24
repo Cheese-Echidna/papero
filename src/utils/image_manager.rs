@@ -181,7 +181,6 @@ generator_types! {
     Gradient:   algorithms::pixel::gradient_test::Boring,
     Noise:      algorithms::pixel::noise::NoiseRender,
     Spiral:     algorithms::pixel::spiral::Spiral,
-    Waterfall:  algorithms::pixel::waterfall::Waterfall,
     //
     Hex:        algorithms::shapes::hex::Hex,
 }
