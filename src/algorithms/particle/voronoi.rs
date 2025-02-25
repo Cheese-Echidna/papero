@@ -2,6 +2,8 @@ use crate::*;
 use glam::f64::DVec2 as Vec2;
 use rand::random;
 use rayon::prelude::*;
+use crate::utils::colour_utils::Colour3;
+use crate::utils::num_utils::lerp;
 
 const BLACK: Rgb<f32> = Rgb([0.0, 0.0, 0.0]);
 
@@ -11,12 +13,15 @@ pub struct Voronoi;
 impl Generator for Voronoi {
     fn generate(args: &Args) -> DynamicImage {
         let (w, h) = (args.width as f64, args.height as f64);
-        let points = (0_usize..500)
+        let points = (0_usize..100)
             .map(|_| {
                 let p = Vec2::new(w * random::<f64>(), h * random::<f64>());
                 let (x, y) = ((p.x / w) as f32, (p.y / h) as f32);
-                let c = colour_utils::custom_transition_gradient(x, y);
-                (p, c)
+                let c1 = Rgb([0_f32, 0.55_f32, 0.69_f32]);
+                let c2 = Rgb([0.78_f32, 0.16_f32, 0.42_f32]);
+                let mut c = lerp(x, c1.to_vec3(), c2.to_vec3());
+                c *= lerp(1.0 - y, 0.4, 1.0);
+                (p, Rgb::from_vec3(c))
             })
             .collect::<Vec<(Vec2, Rgb<f32>)>>();
 

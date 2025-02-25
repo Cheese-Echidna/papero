@@ -1,6 +1,9 @@
 #![allow(dead_code)]
+use std::ops::{Add, Sub, Mul};
 
-pub(crate) fn lerp(t: f32, from: f32, to: f32) -> f32 {
+pub(crate) fn lerp<T>(t: f32, from: T, to: T) -> T
+where T: Copy + Add<Output = T> + Sub<Output = T> + Mul<f32, Output = T>,
+{
     (to - from) * t + from
 }
 
