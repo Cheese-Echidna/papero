@@ -17,7 +17,7 @@ impl Generator for Voronoi {
             .map(|_| {
                 let p = Vec2::new(w * random::<f64>(), h * random::<f64>());
                 let (x, y) = ((p.x / w) as f32, (p.y / h) as f32);
-                let c1 = Rgb([0_f32, 0.55_f32, 0.69_f32]);
+                let c1 = Rgb([0.17_f32, 0.22_f32, 0.56_f32]);
                 let c2 = Rgb([0.78_f32, 0.16_f32, 0.42_f32]);
                 let mut c = lerp(x, c1.to_vec3(), c2.to_vec3());
                 c *= lerp(1.0 - y, 0.4, 1.0);

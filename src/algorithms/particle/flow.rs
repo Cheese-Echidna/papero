@@ -2,11 +2,11 @@ use crate::utils::colour_utils;
 use crate::utils::colour_utils::ImageColour;
 use crate::utils::noise::BetterFbm;
 use crate::{Args, Generator};
-use glam::{Vec2, Vec4};
+use glam::{UVec2, Vec2, Vec4};
 use image::{DynamicImage, GenericImageView, Rgba, Rgba32FImage};
 use palette::named::BLACK;
 use rand::Rng;
-use std::f32::consts::{FRAC_PI_2, TAU};
+use std::f32::consts::TAU;
 
 const NOISE_SCALE: f64 = 0.002;
 pub(crate) const FORCE_SCALE: f32 = 1.;
@@ -34,11 +34,10 @@ impl Particle {
         }
     }
 
-    fn update(&mut self, size: (u32, u32), better_fbm: &BetterFbm) {
-        let (w, h) = (size.0 as f32, size.1 as f32);
+    fn update(&mut self, size: Vec2, better_fbm: &BetterFbm) {
         let bound_dim = 1.2;
-        let (x_min, x_max) = ((1.0 - bound_dim) * w, bound_dim * w);
-        let (y_min, y_max) = ((1.0 - bound_dim) * h, bound_dim * h);
+        let (x_min, x_max) = ((1.0 - bound_dim) * size.x, bound_dim * size.x);
+        let (y_min, y_max) = ((1.0 - bound_dim) * size.y, bound_dim * size.y);
         if self.pos.x > x_max || self.pos.x < x_min || self.pos.y > y_max || self.pos.y < y_min {
             self.dead = true;
         }
@@ -68,14 +67,9 @@ impl Particle {
         }
     }
 
-    fn step(&mut self, image: &mut Rgba32FImage) {
-        // println!("{:?} prev", self.prev_pos);
-        // println!("{:?} now", self.pos);
-        // draw_xiaolin_wu(image, self.prev_pos, self.pos, self.col);
-        // println!("drawn");
-
-        // plot_line(image, self.prev_pos, self.pos, self.col);
+    fn draw(&self, image: &mut Rgba32FImage) {
         let [x, y] = self.pos.as_uvec2().to_array();
+
         if image.in_bounds(x, y) {
             let prev = image.get_pixel(x, y);
             let new = blend(*prev, self.col);
@@ -88,6 +82,7 @@ struct ParticleSet {
     particles: Vec<Particle>,
     dead: bool,
     fbm: BetterFbm,
+    size: Vec2
 }
 
 impl ParticleSet {
@@ -99,15 +94,12 @@ impl ParticleSet {
 
         for _ in 0..n {
             let size = Vec2::new(size.0 as f32, size.1 as f32);
-            let px = rng.gen_range((0.0)..(size.x));
-            let py = rng.gen_range(0.0..size.y);
-            // let px = size.x * -0.2;
-            // let py = rng.gen_range((size.y * -0.2)..(size.y * 1.2));
+            let p = (crate::utils::num_utils::random_unit_vec() * 1.4 - 0.2) * size;
 
-            let col = colour_utils::sick_gradient(px / size.x, py / size.y).with_alpha_of(0.35);
+            let col = colour_utils::sick_gradient(p.x / size.x, p.y / size.y).with_alpha_of(0.35);
 
-            particles.push(Particle::new(Vec2::new(px, py), lifetime, col, false));
-            particles.push(Particle::new(Vec2::new(px, py), lifetime, col, true));
+            particles.push(Particle::new(Vec2::new(p.x, p.y), lifetime, col, false));
+            particles.push(Particle::new(Vec2::new(p.x, p.y), lifetime, col, true));
         }
 
         let seed = rng.gen_range(0..u32::MAX);
@@ -118,29 +110,36 @@ impl ParticleSet {
             particles,
             dead: false,
             fbm,
+            size: Vec2::new(size.0 as f32, size.1 as f32),
         }
     }
 
-    fn update(&mut self, size: (u32, u32)) {
+    fn update(&mut self) {
         self.dead = true;
         for p in &mut self.particles {
             if !p.dead {
                 self.dead = false;
-                p.update(size, &self.fbm);
+                p.update(self.size, &self.fbm);
             }
         }
     }
 
-    fn draw(&mut self, image: &mut Rgba32FImage) {
-        for p in &mut self.particles {
-            if !p.dead {
-                p.step(image);
+    fn draw(&self, image: &mut Rgba32FImage) {
+        for p in self.particles.iter() {
+            if !p.dead && self.includes(p, 1.0) {
+                p.draw(image);
             }
         }
     }
 
     fn alive(&self) -> usize {
         self.particles.iter().filter(|p| !p.dead).count()
+    }
+
+    fn includes(&self, particle: &Particle, scale: f32) -> bool {
+        let (x_min, x_max) = ((1.0 - scale) * self.size.x, scale * self.size.x);
+        let (y_min, y_max) = ((1.0 - scale) * self.size.y, scale * self.size.y);
+        !(particle.pos.x > x_max || particle.pos.x < x_min || particle.pos.y > y_max || particle.pos.y < y_min)
     }
 
     // main loop
@@ -151,7 +150,7 @@ impl ParticleSet {
         while !self.dead {
             counter += 1;
 
-            self.update(args.wh());
+            self.update();
             self.draw(&mut image);
 
             let alive_prop = self.alive() as f32 / self.particles.len() as f32;
@@ -217,26 +216,3 @@ fn blend(bg: Rgba<f32>, fg: Rgba<f32>) -> Rgba<f32> {
 
     Rgba([out_r, out_g, out_b, alpha_final])
 }
-
-// // let seed = 4;
-// // let perlin = Perlin::new(seed as u32);
-// let perlin = |x: [f32; 2]| {
-//     fbm(seed, 0.5, 5, x)
-// };
-//
-// let mut noise: Vec<Vec<f32>> = Vec::new();
-//
-// let mut noise_image = RgbaImage::new(size.0, size.1, BLACK);
-//
-// for y in 0..size.1 {
-//     let mut row: Vec<f32> = Vec::new();
-//     for x in 0..size.0 {
-//         // I changed the next line so that val element [0,1] instead of [-1,1]
-//         let val = (perlin([x as f32 * NOISE_SCALE/args.multiplier as f32, y as f32 * NOISE_SCALE/args.multiplier as f32]) + 1.0) / 2.0;
-//         noise_image.set_pixel(x, y, Hsva::new(val, 1.0, 1.0, 1.0).to::<Rgba>());
-//         row.push(val);
-//     }
-//     noise.push(row);
-// }
-//
-// noise_image.save("perlin.png");

@@ -1,5 +1,7 @@
 #![allow(dead_code)]
 use std::ops::{Add, Sub, Mul};
+use glam::Vec2;
+use rand::random;
 
 pub(crate) fn lerp<T>(t: f32, from: T, to: T) -> T
 where T: Copy + Add<Output = T> + Sub<Output = T> + Mul<f32, Output = T>,
@@ -35,4 +37,8 @@ pub(crate) fn smootherstep(edge0: f32, edge1: f32, x: f32) -> f32 {
 /// count elem [1, inf]
 pub(crate) fn staircase(x: f32, count: f32) -> f32 {
     (x * count).floor() / count
+}
+
+pub(crate) fn random_unit_vec() -> Vec2 {
+    Vec2::new(random(), random())
 }
