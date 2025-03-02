@@ -1,8 +1,9 @@
-use crate::algorithms::shapes::shape::{ShapeObject, ShapeSet};
 use crate::*;
 use crate::{Args, Generator};
 use glam::{UVec2, Vec2};
-use rand_distr::num_traits::clamp;
+use crate::algorithms::shapes::types::hex::Hexagon;
+use crate::algorithms::shapes::types::shape_object::ShapeObject;
+use crate::algorithms::shapes::types::shape_set::ShapeSet;
 
 #[derive(Default)]
 pub struct Hex;
@@ -22,12 +23,13 @@ impl Generator for Hex {
                     y as f32 / height as f32 * 0.5 + 0.5,
                 );
 
-                let p = Hexagon {
+                let p = Hexagon::new(
                     pos,
-                    col: colour,
+                    colour,
                     size,
-                    radius: 0.0,
-                };
+                    0.0,
+                );
+
                 points.push(Box::new(p) as Box<dyn ShapeObject>);
             }
         }
@@ -41,49 +43,4 @@ impl Generator for Hex {
     }
 }
 
-// Note for now we are only doing pointy top hexagons
-// size is the distance from the point to the centre
-pub struct Hexagon {
-    pos: Vec2,
-    col: Rgb<f32>,
-    size: f32,
-    radius: f32,
-}
 
-impl ShapeObject for Hexagon {
-    fn sdf(&self, position: &Vec2) -> f32 {
-        let k2 = Vec2::new(-0.866_025_4, 0.5);
-        let z = 0.577_350_26;
-        let s = self.size;
-        let r = self.radius;
-
-        // confusing line
-        let mut p = (*position - self.pos).abs();
-        p -= k2 * (2.0 * f32_min(k2.dot(p), 0.0));
-        p -= Vec2::new(clamp(p.x, -z * s, z * s), s);
-        p.length() * sign(p.y) - r
-    }
-
-    fn colour(&self) -> Rgb<f32> {
-        self.col
-    }
-
-    fn position_mut(&mut self) -> &mut Vec2 {
-        &mut self.pos
-    }
-}
-
-fn f32_min(x: f32, y: f32) -> f32 {
-    if x > y {
-        return y;
-    }
-    x
-}
-
-fn sign(x: f32) -> f32 {
-    if x >= 0.0 {
-        1.0
-    } else {
-        -1.0
-    }
-}

@@ -1,24 +1,13 @@
 use crate::utils::image_manager::Args;
 use glam::{UVec2, Vec2, Vec3};
 use image::{DynamicImage, GenericImage, Rgb, Rgb32FImage};
+use crate::algorithms::shapes::types::ball::Ball;
+use crate::algorithms::shapes::types::shape_object::ShapeObject;
 
 pub struct ShapeSet {
     pub(crate) objects: Vec<Box<dyn ShapeObject>>,
 }
 
-pub struct Ball {
-    position: Vec2,
-    colour: Rgb<f32>,
-    radius: f32,
-}
-
-pub trait ShapeObject: Send + Sync {
-    fn sdf(&self, position: &Vec2) -> f32;
-
-    fn colour(&self) -> Rgb<f32>;
-
-    fn position_mut(&mut self) -> &mut Vec2;
-}
 
 impl ShapeSet {
     pub fn new_uniform_of_balls(
@@ -77,28 +66,10 @@ impl ShapeSet {
         }
         image.into()
     }
-}
 
-impl Ball {
-    pub fn new(position: Vec2, colour: Rgb<f32>, radius: f32) -> Self {
-        Ball {
-            position,
-            colour,
-            radius,
+    pub fn new(objects: Vec<impl ShapeObject + 'static>) -> Self {
+        Self {
+            objects: objects.into_iter().map(|x| Box::new(x) as Box<dyn ShapeObject>).collect(),
         }
-    }
-}
-
-impl ShapeObject for Ball {
-    fn sdf(&self, point: &Vec2) -> f32 {
-        self.position.distance(*point) - self.radius
-    }
-
-    fn colour(&self) -> Rgb<f32> {
-        self.colour
-    }
-
-    fn position_mut(&mut self) -> &mut Vec2 {
-        &mut self.position
     }
 }
