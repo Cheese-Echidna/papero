@@ -16,8 +16,8 @@ trait Generator: Default {
 }
 
 fn main() {
-    let a = Args::new(1920, 1080, "./out");
-    ImageManager::run::<algorithms::shapes::delaunay::DelaunayTri>(&a).unwrap();
+    let a = Args::new(1920, 1080, "./demo");
+    ImageManager::run::<algorithms::maths::julia::Julia>(&a).unwrap();
 }
 
 #[cfg(test)]
