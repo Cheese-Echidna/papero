@@ -23,6 +23,12 @@ Boring gradient test
 
 ---
 
+Delaunay Triangulation
+
+![Delaunay Triangulation.png](demo/Delaunay%20Triangulation.png)
+
+---
+
 Domain Warping
 
 ![Domain Warping.png](demo/Domain%20Warping.png)

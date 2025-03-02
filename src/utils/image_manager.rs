@@ -174,16 +174,17 @@ generator_types! {
     Pinski:     algorithms::maths::pinski::Pinski,
     Julia:      algorithms::maths::julia::Julia,
     //
-    Domain:     algorithms::particle::domain::DomainWarping,
-    // Flow:       algorithms::particle::flow::Flow,
+    Flow:       algorithms::particle::flow::Flow,
     Voronoi:    algorithms::particle::voronoi::Voronoi,
     //
+    Domain:     algorithms::pixel::domain::DomainWarping,
     Bitwise:    algorithms::pixel::bitwise::Bitwise,
     Gradient:   algorithms::pixel::gradient_test::Boring,
     Noise:      algorithms::pixel::noise::NoiseRender,
     Spiral:     algorithms::pixel::spiral::Spiral,
     //
     Hex:        algorithms::shapes::hex::Hex,
+    Delaunay:   algorithms::shapes::delaunay::DelaunayTri,
 }
 
 pub(crate) struct Args {

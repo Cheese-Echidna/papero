@@ -1,2 +1,3 @@
 pub(crate) mod hex;
-mod shape;
+pub(crate) mod delaunay;
+mod types;

@@ -17,7 +17,7 @@ trait Generator: Default {
 
 fn main() {
     let a = Args::new(1920, 1080, "./out");
-    ImageManager::run::<algorithms::particle::flow::Flow>(&a).unwrap();
+    ImageManager::run::<algorithms::shapes::delaunay::DelaunayTri>(&a).unwrap();
 }
 
 #[cfg(test)]
