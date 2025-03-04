@@ -86,9 +86,3 @@ Spiral
 Voronoi
 
 ![Voronoi.png](demo/Voronoi.png)
-
----
-
-Waterfall
-
-![Waterfall.png](demo/Waterfall.png)

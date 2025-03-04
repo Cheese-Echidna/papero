@@ -45,7 +45,7 @@ impl ShapeSet {
                     .iter()
                     .filter_map(|object| {
                         let d = object.sdf(&pos);
-                        if d < 0.0 {
+                        if d < -0.0 {
                             return Some(object.colour());
                         };
                         None
@@ -71,5 +71,17 @@ impl ShapeSet {
         Self {
             objects: objects.into_iter().map(|x| Box::new(x) as Box<dyn ShapeObject>).collect(),
         }
+    }
+
+    pub fn contains(&self, p: Vec2) -> bool {
+        self.objects.iter().any(|x| x.contains(p))
+    }
+
+    pub fn sdf(&self, p: Vec2) -> f32 {
+        self.objects.iter().map(|x| x.sdf(&p)).min_by(|a, b| a.partial_cmp(b).unwrap()).unwrap()
+    }
+
+    pub fn colour(&self, p:Vec2) -> Rgb<f32> {
+        self.objects.iter().find(|x| x.contains(p)).unwrap().colour()
     }
 }

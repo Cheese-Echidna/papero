@@ -25,8 +25,8 @@ impl Generator for Julia {
                 // Centre of the complex plane that we're focusing on
                 let centre = Complex64::new(0.0, -0.4);
 
-                // Zoom level: Smaller = stuff gets smaller
-                let zoom = 1.0 / 0.8;
+                // Zoom level: Bigger = number bigger
+                let zoom = 1.25;
 
                 let z = Complex64::new(x, y) / zoom + centre;
 

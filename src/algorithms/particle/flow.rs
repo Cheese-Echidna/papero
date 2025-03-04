@@ -67,12 +67,15 @@ impl Particle {
         }
     }
 
-    fn draw(&self, image: &mut Rgba32FImage) {
+    fn draw(&self, image: &mut Rgba32FImage, i: usize) {
         let [x, y] = self.pos.as_uvec2().to_array();
 
         if image.in_bounds(x, y) {
             let prev = image.get_pixel(x, y);
-            let new = blend(*prev, self.col);
+
+            let colour = self.col;
+
+            let new = blend(*prev, colour);
             image.put_pixel(x, y, new)
         }
     }
@@ -82,7 +85,8 @@ struct ParticleSet {
     particles: Vec<Particle>,
     dead: bool,
     fbm: BetterFbm,
-    size: Vec2
+    size: Vec2,
+    n: usize,
 }
 
 impl ParticleSet {
@@ -111,10 +115,12 @@ impl ParticleSet {
             dead: false,
             fbm,
             size: Vec2::new(size.0 as f32, size.1 as f32),
+            n,
         }
     }
 
     fn update(&mut self) {
+        self.n += 1;
         self.dead = true;
         for p in &mut self.particles {
             if !p.dead {
@@ -127,7 +133,7 @@ impl ParticleSet {
     fn draw(&self, image: &mut Rgba32FImage) {
         for p in self.particles.iter() {
             if !p.dead && self.includes(p, 1.0) {
-                p.draw(image);
+                p.draw(image, self.n);
             }
         }
     }

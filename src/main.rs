@@ -17,7 +17,7 @@ trait Generator: Default {
 
 fn main() {
     let a = Args::new(1920, 1080, "./demo");
-    ImageManager::run::<algorithms::maths::julia::Julia>(&a).unwrap();
+    ImageManager::run::<algorithms::shapes::testing::ShapeTesting>(&a).unwrap();
 }
 
 #[cfg(test)]

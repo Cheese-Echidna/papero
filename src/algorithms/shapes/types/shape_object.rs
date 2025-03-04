@@ -7,4 +7,8 @@ pub trait ShapeObject: Send + Sync {
     fn colour(&self) -> Rgb<f32>;
 
     fn position_mut(&mut self) -> &mut Vec2;
+
+    fn contains(&self, p: Vec2) -> bool {
+        self.sdf(&p) <= 0.0
+    }
 }
