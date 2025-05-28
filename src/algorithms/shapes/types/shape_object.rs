@@ -1,10 +1,11 @@
 use glam::Vec2;
 use image::Rgb;
+use crate::algorithms::shapes::types::ball::AveragableColour;
 
-pub trait ShapeObject: Send + Sync {
+pub trait ShapeObject<T: AveragableColour>: Send + Sync {
     fn sdf(&self, position: &Vec2) -> f32;
 
-    fn colour(&self) -> Rgb<f32>;
+    fn colour(&self) -> T;
 
     fn position_mut(&mut self) -> &mut Vec2;
 

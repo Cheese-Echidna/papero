@@ -23,7 +23,7 @@ impl Hexagon {
     }
 }
 
-impl ShapeObject for Hexagon {
+impl ShapeObject<Rgb<f32>> for Hexagon {
     fn sdf(&self, position: &Vec2) -> f32 {
         // Compute the vector from the hexagon's center
         let pos = *position - self.pos;

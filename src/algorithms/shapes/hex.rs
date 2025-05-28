@@ -16,7 +16,7 @@ impl Generator for Hex {
         let points = hexagons(args);
         let shapes = ShapeSet { objects: points };
 
-        shapes.generate(args)
+        shapes.generate(args, None)
     }
 
     fn name() -> &'static str {
@@ -25,7 +25,7 @@ impl Generator for Hex {
 }
 
 
-pub fn hexagons(args: &Args) -> Vec<Box<dyn ShapeObject>> {
+pub fn hexagons(args: &Args) -> Vec<Box<dyn ShapeObject<Rgb<f32>>>> {
     let (width, height) = args.wh();
 
     let vx = 120;
@@ -64,7 +64,7 @@ pub fn hexagons(args: &Args) -> Vec<Box<dyn ShapeObject>> {
                 rotation,
             );
 
-            points.push(Box::new(p) as Box<dyn ShapeObject>);
+            points.push(Box::new(p) as Box<dyn ShapeObject<Rgb<f32>>>);
         }
     }
     points

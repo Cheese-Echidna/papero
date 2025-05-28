@@ -32,7 +32,7 @@ impl Generator for DelaunayTri {
 
         let set = ShapeSet::new(triangles);
 
-        set.generate(args)
+        set.generate(args, None)
     }
 
     fn name() -> &'static str {
@@ -45,7 +45,9 @@ pub fn delaunay_triangulation(points: &Vec<Point>) -> Vec<[&Point; 3]> {
         .iter()
         .map(|p| DelaunayPoint::from_xy(p.0.x, p.0.y))
         .collect::<Vec<_>>();
+    
     let triangulation = voronator::delaunator::triangulate(&points_xy).unwrap();
+    
     triangulation
         .triangles
         .windows(3)

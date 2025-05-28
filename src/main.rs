@@ -16,8 +16,8 @@ trait Generator: Default {
 }
 
 fn main() {
-    let a = Args::new(1920, 1080, "./demo");
-    ImageManager::run::<algorithms::shapes::testing::ShapeTesting>(&a).unwrap();
+    let a = Args::new(1200, 1600, "./demo");
+    ImageManager::run::<algorithms::shapes::halftone::Halftone>(&a).unwrap();
 }
 
 #[cfg(test)]
@@ -32,7 +32,7 @@ mod tests {
         let demo_dir = project_dir.join("demo");
         let args = Args::new(1920, 1080, &demo_dir);
         ImageManager::run_all_fast(&args);
-        let prefix = std::fs::read_to_string(project_dir.join("prefix.md")).unwrap();
+        let prefix = fs::read_to_string(project_dir.join("prefix.md")).unwrap();
         let infix = fs::read_dir(demo_dir)
             .unwrap()
             .into_iter()

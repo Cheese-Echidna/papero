@@ -13,7 +13,7 @@ impl Triangle {
     }
 }
 
-impl ShapeObject for Triangle {
+impl ShapeObject<Rgb<f32>> for Triangle {
     fn sdf(&self, position: &Vec2) -> f32 {
         let p = *position;
         let [p0, p1, p2] = self.points;
