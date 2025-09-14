@@ -2,7 +2,7 @@
 
 use crate::utils::num_utils::lerp;
 use crate::*;
-use glam::{Vec3, Vec4};
+use glam::{U8Vec3, Vec3, Vec4};
 use palette::{convert, Clamp, IntoColor};
 use rand::random;
 
@@ -136,17 +136,32 @@ impl<T: ColourType> ImageColour<T> for image::Rgba<T> {
     }
 }
 
-pub(crate) trait Colour3 {
+pub(crate) trait ColourU3 {
+    fn to_vec3(self) -> glam::U8Vec3;
+    fn from_vec3(x: glam::U8Vec3) -> Self;
+}
+
+pub(crate) trait ColourF3 {
     fn to_vec3(self) -> glam::Vec3;
     fn from_vec3(x: glam::Vec3) -> Self;
 }
 
-impl Colour3 for Rgb<f32> {
+impl ColourF3 for Rgb<f32> {
     fn to_vec3(self) -> Vec3 {
         Vec3::from_array(self.0)
     }
 
     fn from_vec3(x: Vec3) -> Self {
+        Self::from(x.to_array())
+    }
+}
+
+impl ColourU3 for Rgb<u8> {
+    fn to_vec3(self) -> U8Vec3 {
+        U8Vec3::from_array(self.0)
+    }
+
+    fn from_vec3(x: U8Vec3) -> Self {
         Self::from(x.to_array())
     }
 }

@@ -1,7 +1,7 @@
 use crate::algorithms::particle::voronoi::points;
 use crate::algorithms::shapes::types::shape_set::ShapeSet;
 use crate::algorithms::shapes::types::tri::Triangle;
-use crate::utils::colour_utils::Colour3;
+use crate::utils::colour_utils::ColourF3;
 use crate::*;
 use glam::{DVec2, Vec3};
 use rayon::prelude::*;
@@ -20,12 +20,13 @@ impl Generator for DelaunayTri {
         let points = points(args, 1.4);
         let triangles = delaunay_triangulation(&points);
 
+        let darken = 0.7;
         let triangles = triangles
             .into_iter()
             .map(|t| {
                 Triangle::new(
                     t.map(|x| x.0.as_vec2()),
-                    Rgb::<f32>::from_vec3(t.map(|x| x.1.to_vec3()).iter().sum::<Vec3>() / 3.),
+                    Rgb::<f32>::from_vec3(t.map(|x| x.1.to_vec3() * darken).iter().sum::<Vec3>() / 3.),
                 )
             })
             .collect::<Vec<Triangle>>();

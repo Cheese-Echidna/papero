@@ -16,8 +16,8 @@ trait Generator: Default {
 }
 
 fn main() {
-    let a = Args::new(1200, 1600, "./demo");
-    ImageManager::run::<algorithms::shapes::halftone::Halftone>(&a).unwrap();
+    let a = Args::new(200, 200, "./out");
+    ImageManager::run::<algorithms::maths::pinski::Pinski>(&a).unwrap();
 }
 
 #[cfg(test)]

@@ -1,6 +1,6 @@
 use crate::algorithms::shapes::halftone::CMYK;
 use crate::algorithms::shapes::types::shape_object::ShapeObject;
-use crate::utils::colour_utils::Colour3;
+use crate::utils::colour_utils::ColourF3;
 use glam::{Vec2, Vec3};
 use image::Rgb;
 

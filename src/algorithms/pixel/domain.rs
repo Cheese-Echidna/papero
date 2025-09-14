@@ -4,7 +4,7 @@ use crate::{utils, Generator};
 use glam::Vec2;
 use image::{DynamicImage, Rgb, RgbImage};
 use palette::named::{BLACK};
-use palette::LinSrgb;
+use palette::{LinSrgb, Srgb};
 
 const SCALE: f32 = 1.0;
 
@@ -51,20 +51,24 @@ impl Generator for DomainWarping {
             let ay = (p.y / (spacing)) as u32 % 2 == 0;
             let on_top = ax ^ ay;
 
-            let mut c1 = utils::colour_utils::into_no_alpha(LinSrgb::new(
-                p.x / w_f32 * 0.7,
-                0.,
-                p.y / h_f32,
-            ));
+            let insync_pink = Srgb::new(
+                0.7764705882,
+                0.1176470588,
+                0.4156862745,
+            );
+
+            let mut c1 = utils::colour_utils::into_no_alpha(insync_pink);
             if hoz_border {
                 c1 = Rgb::<u8>::from_const(BLACK);
             }
 
-            let mut c2 = utils::colour_utils::into_no_alpha(LinSrgb::new(
-                0.,
-                p.y / w_f32 * 0.7,
-                1.0 - p.x / h_f32,
-            ));
+            let insync_blue = Srgb::new(
+                0.1686274510,
+                0.2196078431,
+                0.5607843137,
+            );
+
+            let mut c2 = utils::colour_utils::into_no_alpha(insync_blue);
 
             if vert_border {
                 c2 = Rgb::<u8>::from_const(BLACK);

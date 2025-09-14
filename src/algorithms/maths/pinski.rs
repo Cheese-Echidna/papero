@@ -1,4 +1,5 @@
-use crate::utils::colour_utils::ImageColour;
+use glam::{U8Vec3, Vec3};
+use crate::utils::colour_utils::{convert_from_ok_hsl, ColourF3, ColourU3, ImageColour};
 use crate::*;
 use palette::named::{BLACK, WHITE};
 
@@ -13,29 +14,24 @@ impl Generator for Pinski {
         let white = Rgb::<u8>::from_const(WHITE);
         let mut image = args.image_u8(black);
 
-        // for i in 0..(args.width/3) {
-        //     image.put_pixel(i*3,0,white);
-        // }
-
-        image.put_pixel(args.width / 2 - 1, 0, white);
+        image.put_pixel(args.width / 2 - 1, 0, Rgb([1, 3, 5]));
+        let m = U8Vec3::new(16, 16, 16);
 
         for row in 1..args.height {
             for mid in 0..args.width {
                 let right = mid + 1;
                 let left = mid - 1;
-                let left_v =
-                    u24_from_colour(image.get_pixel_checked(left, row - 1).unwrap_or(&black));
-                let right_v =
-                    u24_from_colour(image.get_pixel_checked(right, row - 1).unwrap_or(&black));
-                let sum = left_v + right_v;
+                let left_v = image.get_pixel_checked(left, row - 1).unwrap_or(&black);
+                let right_v = image.get_pixel_checked(right, row - 1).unwrap_or(&black);
+                let sum = left_v.to_vec3() + right_v.to_vec3();
+                let c = sum % m;
 
-                let c = if sum % 2 == 1 { white } else { black };
-
-                // let c = colour_from_u24(sum);
-                image.put_pixel(mid, row, c)
+                image.put_pixel(mid, row, Rgb::<u8>::from_vec3(c))
             }
         }
-
+        image.pixels_mut().for_each(|x| {
+            *x = Rgb::<u8>::from_vec3(x.to_vec3() * (U8Vec3::splat(255) / m));
+        });
         image.into()
     }
 
@@ -74,3 +70,10 @@ fn u24_from_colour(c: &Rgb<u8>) -> U24 {
     let b = c.0[2] as u32;
     (r << (2 * 8)) + (g << 8) + b
 }
+
+// fn colour_from_u24(c: U24) -> Rgb<u8> {
+//     let r = c >> 16;
+//     let g = (c >> 8) & 0b1111_1111;
+//     let b = c & 0b1111_1111;
+//     Rgb::<u8>::from([r, g, b].map(|x| x as u8))
+// }

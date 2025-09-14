@@ -3,7 +3,7 @@ use crate::*;
 use glam::f64::DVec2 as Vec2;
 use rand::random;
 use rayon::prelude::*;
-use crate::utils::colour_utils::Colour3;
+use crate::utils::colour_utils::ColourF3;
 use crate::utils::num_utils::lerp;
 
 const BLACK: Rgb<f32> = Rgb([0.0, 0.0, 0.0]);
@@ -15,8 +15,10 @@ pub fn points(args: &Args, extend: f64) -> Vec<(DVec2, Rgb<f32>)> {
         .map(|_| {
             let p = Vec2::new(w * f(), h * f());
             let (x, y) = ((p.x / w) as f32, (p.y / h) as f32);
-            let c1 = Rgb([0.17_f32, 0.22_f32, 0.56_f32]);
-            let c2 = Rgb([0.78_f32, 0.16_f32, 0.42_f32]);
+            let c1 = Rgb([0.99_f32, 0.57, 0.07]);
+            let c2 = Rgb([1_f32, 0.37, 0.38]);
+            // let insync1 = Rgb([0.17_f32, 0.22_f32, 0.56_f32]);
+            // let insync2 = Rgb([0.78_f32, 0.16_f32, 0.42_f32]);
             let mut c = lerp(x, c1.to_vec3(), c2.to_vec3());
             c *= lerp(1.0 - y, 0.4, 1.0);
             (p, Rgb::from_vec3(c))
