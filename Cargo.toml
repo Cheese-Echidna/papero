@@ -6,6 +6,10 @@ edition = "2021"
 [profile.dev]
 opt-level = 3               # Use slightly better optimizations.
 
+[lib]
+crate-type = ["cdylib"]
+
+
 [build-dependencies]
 winres = "0.1.11"
 
@@ -14,7 +18,7 @@ image = "0.25.2"
 rand = "0.8.5"
 rand_distr = "0.4.3"
 rayon = "1.10.0"
-wallpaper = "3.2.0"
+#wallpaper = "3.2.0"
 num = "0.4.3"
 palette = "0.7.6"
 strum = { version = "0.26", features = ["derive"] }
@@ -22,3 +26,8 @@ fast_hilbert = "2.0.0"
 noise = "0.9.0"
 glam = "0.29.2"
 voronator = "0.2.1"
+base64 = "0.22.1"
+wasm-bindgen = "0.2.101"
+
+# DO NOT CHANGE
+getrandom = {version = "0.2.16", features = ["js"]}

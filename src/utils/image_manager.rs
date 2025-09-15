@@ -23,12 +23,12 @@ impl ImageManager {
         T::name()
     }
 
-    /// Runs the generator and sets the image as the wallpaper
-    pub(crate) fn run_wallpaper<T: Generator>(args: &Args) {
-        Self::run::<T>(args).unwrap();
-        Self::set_as_wallpaper(args, T::name());
-        println!("Set image as wallpaper");
-    }
+    // /// Runs the generator and sets the image as the wallpaper
+    // pub(crate) fn run_wallpaper<T: Generator>(args: &Args) {
+    //     Self::run::<T>(args).unwrap();
+    //     Self::set_as_wallpaper(args, T::name());
+    //     println!("Set image as wallpaper");
+    // }
 
     /// Gets the path to the output image
     /// args.output_dir/name.png
@@ -64,12 +64,12 @@ impl ImageManager {
         (name.to_string(), time)
     }
 
-    /// Sets the image at the given path as the wallpaper
-    fn set_as_wallpaper(args: &Args, name: &str) {
-        let path = Self::get_output_path(args, name);
-        wallpaper::set_mode(wallpaper::Mode::Span).unwrap();
-        wallpaper::set_from_path(path.to_str().unwrap()).unwrap();
-    }
+    // /// Sets the image at the given path as the wallpaper
+    // fn set_as_wallpaper(args: &Args, name: &str) {
+    //     let path = Self::get_output_path(args, name);
+    //     wallpaper::set_mode(wallpaper::Mode::Span).unwrap();
+    //     wallpaper::set_from_path(path.to_str().unwrap()).unwrap();
+    // }
 
     /// Run all generators at the same resolution in series
     pub(crate) fn run_all(args: &Args) {
@@ -194,7 +194,7 @@ pub(crate) struct Args {
 }
 
 impl Args {
-    pub(crate) fn new(width: u32, height: u32, dir: impl Into<PathBuf>) -> Self {
+    pub fn new(width: u32, height: u32, dir: impl Into<PathBuf>) -> Self {
         Self {
             width,
             height,
